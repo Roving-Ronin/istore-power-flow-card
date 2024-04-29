@@ -1,80 +1,47 @@
-# Sunsynk-Power-Flow-Card
-
-An animated Home Assistant card to emulate the power flow that's shown on the Sunsynk Inverter screen. You can use this to display data from many inverters e.g. Sunsynk, Deye, Solis, Lux, FoxESS, Goodwe, Huawei etc as long as you have the required sensor data. See the [wiki](https://github.com/slipx06/sunsynk-power-flow-card/wiki) for integration methods and examples.
+# Sunsynk-Power-Flow-Card for Huawei / iStore (Australia) Inverters
 
 [![Open your Home Assistant instance and open a repository inside the Home Assistant Community Store.](https://my.home-assistant.io/badges/hacs_repository.svg)](https://my.home-assistant.io/redirect/hacs_repository/?owner=slipx06&repository=sunsynk-power-flow-card&category=plugin)
- ![GitHub release (latest by date)](https://img.shields.io/github/v/release/slipx06/sunsynk-power-flow-card?style=for-the-badge) 
-[![Community Forum](https://img.shields.io/badge/community-forum-brightgreen.svg?style=for-the-badge)](https://community.home-assistant.io/t/sunsynk-deye-inverter-power-flow-card/562933/1)
-<a href="https://www.buymeacoffee.com/slipx" target="_blank"><img src="https://cdn.buymeacoffee.com/buttons/default-orange.png" alt="Buy Me A Coffee" height="28" width="120"></a>
+ ![GitHub release (latest by date)](https://img.shields.io/github/v/release/slipx06/sunsynk-power-flow-card?style=for-the-badge) <a href="https://www.buymeacoffee.com/rovingronin" target="_blank"><img src="https://cdn.buymeacoffee.com/buttons/default-orange.png" alt="Buy Me A Coffee" height="28" width="120"></a>
+
+## Purpose
+Providing support for Huawei and iStore (in Australia) inverter and battery users (using WLCRS Integration for HA) using the Sunsynk Power Flow Card.
+Any issues re the example derived sensor files, and electricity cost yaml files can be raised upon this repository, where updates shall be made prior to their them being merged into the main Sunsynk site. 
+
+As such all [examples files](https://github.com/Roving-Ronin/sunsynk-power-flow-card/tree/development/docs/examples/huawei_packages) in the Development branch to be used for Huawei / iStore with Sunsynk, and are to be considered pre-release (beta) versions, whilst the ones on the Sunsynk site are the current (GA) release versions.
+
+
+The main site for the SunSynk card is located at: [wiki](https://github.com/slipx06/sunsynk-power-flow-card/wiki) for other integration methods and (release) examples.
+
+
 ## Documentation
 
-Refer to [https://slipx06.github.io/sunsynk-power-flow-card/index.html](https://slipx06.github.io/sunsynk-power-flow-card/index.html)
+Refer to [https://slipx06.github.io/sunsynk-power-flow-card/examples/huawei.html](https://slipx06.github.io/sunsynk-power-flow-card/examples/huawei.html)
 
-## Features
-
-* Option to switch between three card styles: `compact`, `lite` or `full`.
-* Animated power flow based on positive/negative/zero sensor values with configurable dynamic speed. (Supports inverted battery, AUX and grid power).
-* Dynamic battery image based on SOC.
-* Grid connected status.
-* Configurable battery size and shutdown SOC to calculate and display remaining battery runtime based on current battery usage and system time slot setting i.e. SOC, Grid Charge. Can be toggled off.
-* Daily Totals that can be toggled on or off.
-* Hide all solar data if not installed or specify number of mppts in use. Set custom MPPT labels.
-* "Use Timer" setting and "Energy Pattern" setting (Priority Load or Priority Battery) shown as dynamic icons, with the ability to hide if not required. If setup as switches can be toggled by clicking on the card.
-* Panel mode for bigger card.
-* AUX and Non-essential can be hidden from the full card or assigned configurable labels.
-* Customisable - Change colours and images.
-* Most entities can be clicked to show more-info dialog.
-* Optional data points include self sufficiency and ratio percentages, battery temperature, AC and DC temperature.
-* Display additional non-essential, essential and AUX loads.
-* Display energy cost per kWh and solar sell status.
-* Select your inverter model for custom inverter status and battery status messages i.e. Sunsynk, Lux, Goodwe, Solis.
 
 ## Screenshots
 *Compact Version*
 
-![image](https://github.com/slipx06/sunsynk-power-flow-card/assets/7227275/b1e437a8-d1f7-4d6a-a549-1cc908950002)
-![image](https://github.com/slipx06/sunsynk-power-flow-card/assets/7227275/49c499c5-9d2b-43e7-8f5d-5b9da5e07fb9)
-
+![SunSynk-L1-Battery-Compact](https://github.com/Roving-Ronin/sunsynk-power-flow-card/assets/108674933/c8d1a798-f31d-46ed-bb6c-26b7ec3eb414)
+![SunSynk-M1-Compact](https://github.com/Roving-Ronin/sunsynk-power-flow-card/assets/108674933/7919d046-0005-455d-8e59-2eb091f712ed)
 
 
 
 *Lite Version*
 
-![image](https://github.com/slipx06/sunsynk-power-flow-card/assets/7227275/d25c621c-2607-445f-b3a3-865930387a05)
-![image](https://github.com/slipx06/sunsynk-power-flow-card/assets/7227275/5a9078ee-7375-4f1c-affa-6fe291d62f8a)
-![image](https://github.com/slipx06/sunsynk-power-flow-card/assets/7227275/73d6fae3-3e6b-4891-acc2-deb29156cd2d)
-![image](https://github.com/slipx06/sunsynk-power-flow-card/assets/7227275/54ae290d-aa5c-428e-8a00-2a75e11c2de8)
+![SunSynk-L1-Battery-Lite](https://github.com/Roving-Ronin/sunsynk-power-flow-card/assets/108674933/1f00bc41-981f-4e7a-a449-3d63912ba927)
+![SunSynk-M1-Lite](https://github.com/Roving-Ronin/sunsynk-power-flow-card/assets/108674933/060072bd-9f76-45d2-a700-59c59cea1fcb)
+
 
 
 *Full Version*
 
-![image](https://github.com/slipx06/sunsynk-power-flow-card/assets/7227275/fdcce257-e7b5-4874-926c-17e911e83eba)
-![image](https://github.com/slipx06/sunsynk-power-flow-card/assets/7227275/12af5b02-c456-4685-a50f-bd0044b9e9b0)
+![SunSynk-L1-Battery-Animated](https://github.com/Roving-Ronin/sunsynk-power-flow-card/assets/108674933/45b4723d-62fb-4225-9c94-261d83cb1970)
+![SunSynk-M1-Full](https://github.com/Roving-Ronin/sunsynk-power-flow-card/assets/108674933/e9954f99-735d-479c-8de7-16542915b3f4)
 
 
 
 
+## Don't Forget
+If you find the Sunsynk card useful, don't forget to also buy the developer of the card [@slipx06](https://github.com/slipx06) a coffee !
 
-
-## Installation
-
-The card can be installed via HACS (recommended) or manually.
-
-### Installation using HACS
-[![hacs_badge](https://img.shields.io/badge/HACS-Default-blue.svg)](https://github.com/custom-components/hacs)
-
-
-1. Install HACS.
-2. Search & Install sunsynk-power-flow-card or click the button below.
-
-[![Open your Home Assistant instance and open a repository inside the Home Assistant Community Store.](https://my.home-assistant.io/badges/hacs_repository.svg)](https://my.home-assistant.io/redirect/hacs_repository/?owner=slipx06&repository=sunsynk-power-flow-card&category=plugin)
-
-### Manual Installation
-
-1. Create a new directory under `www` and name it `sunsynk-power-flow-card` e.g `www/sunsynk-power-flow-card/`.
-2. Copy the `sunsynk-power-flow-card.js` into the directory.
-3. Add the resource to your Dashboard. You can append the filename with a `?ver=x` and increment x each time you download a new version to force a reload and avoid using a cached version. It is also a good idea to clear your browser cache.
-
-![image](https://user-images.githubusercontent.com/7227275/235441241-93ab0c7d-341d-428f-8ca8-60ec932dde2d.png)
-
-
+<a href="https://www.buymeacoffee.com/slipx" target="_blank"><img src="https://cdn.buymeacoffee.com/buttons/default-orange.png" alt="Buy Me A Coffee" height="28" width="120"></a>
