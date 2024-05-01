@@ -131,6 +131,7 @@ Example 1 - 1 x L1 1phase inverter with a 15kWh LUNA ESS battery - 2 PV strings 
     show_remaining_energy: true
     dynamic_colour: true
     linear_gradient: true
+    animate: true
   solar:
     colour: '#F7BC00'
     show_daily: true
@@ -295,6 +296,7 @@ Example 2 - 2 x L1 1phase inverter with a 15kWh LUNA ESS battery - 4 PV strings 
     show_remaining_energy: true
     dynamic_colour: true
     linear_gradient: true
+    animate: true
   solar:
     colour: '#F7BC00'
     show_daily: true
@@ -470,6 +472,7 @@ Example 3 - 1 x M1 3phase inverter with a 15kWh LUNA ESS battery - 2 PV strings 
     show_remaining_energy: true
     dynamic_colour: true
     linear_gradient: true
+    animate: true
   solar:
     colour: '#F7BC00'
     show_daily: true
@@ -644,6 +647,7 @@ Example 4 - 1 x M1 3phase inverters with 2 x 15kWh LUNA ESS batteries - 2 PV str
     show_remaining_energy: true
     dynamic_colour: true
     linear_gradient: true
+    animate: true
   solar:
     colour: '#F7BC00'
     show_daily: true
@@ -819,6 +823,7 @@ Example 5 - 2 x M1 3phase inverters with a 15kWh LUNA ESS battery - 4 PV strings
     show_remaining_energy: true
     dynamic_colour: true
     linear_gradient: true
+    animate: true
   solar:
     colour: '#F7BC00'
     show_daily: true
