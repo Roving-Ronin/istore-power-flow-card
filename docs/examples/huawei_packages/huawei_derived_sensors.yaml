@@ -129,32 +129,31 @@ template:
       state: >-
         {% set inverter_1_active_power = states('sensor.inverter_active_power') | float(default=0) %}
         {% set inverter_2_active_power = states('sensor.inverter_active_power_2') | float(default=0) %}
+        {% set count = 0 %}
+        {% set sum = 0 %}
 
-        {% if states('sensor.inverter_active_power_2') == 'unknown' %}
-          {{ inverter_1_active_power }}
-        {% else %}
-          {% set count = 0 %}
-          {% set sum = 0 %}
-
-          {% if states('sensor.inverter_active_power') != 'unknown' %}
-            {% set sum = sum + inverter_1_active_power %}
-            {% set count = count + 1 %}
-          {% endif %}
-
-          {% if states('sensor.inverter_active_power_2') != 'unknown' %}
-            {% set sum = sum + inverter_2_active_power %}
-            {% set count = count + 1 %}
-          {% endif %}
-
-          {% if count > 0 %}
-            {{ sum | round(1) }}
-          {% else %}
-            N/A
-          {% endif %}
+        {% if states('sensor.inverter_active_power') != ['unknown', 'unavailable', 'none'] %}
+          {% set sum = sum + inverter_1_active_power %}
+          {% set count = count + 1 %}
         {% endif %}
-      availability: >-
-        {{  states('sensor.inverter_active_power')   | is_number
-        and states('sensor.inverter_active_power_2') | is_number }}
+
+        {% if states('sensor.inverter_active_power_2') != ['unknown', 'unavailable', 'none'] %}
+          {% set sum = sum + inverter_2_active_power %}
+          {% set count = count + 1 %}
+        {% endif %}
+
+        {% if count > 0 %}
+          {{ sum | round(1) }}
+        {% else %}
+          N/A
+        {% endif %}
+    availability_template: >
+      {% set inverter_1_available = not states('sensor.inverter_active_power') in ['unknown', 'unavailable', 'none'] %}
+      {% set inverter_2_available = false %}
+      {% if 'sensor.inverter_active_power_2' in states %}
+        {% set inverter_2_available = not states('sensor.inverter_active_power_2') in ['unknown', 'unavailable', 'none'] %}
+      {% endif %}
+      {{ inverter_1_available or inverter_2_available }}
 
 
   # Provides the combined Input Power from PV string of both inverters, in Watts
@@ -195,6 +194,9 @@ template:
         and states('sensor.inverter_input_power_2') | is_number }}
 
 
+
+*** TO UPDATE ***
+
   # Provides the combined Lifetime Yield of both inverters, in kWh.
   - sensor:
     - name: "Inverters - Total Yield"
@@ -232,7 +234,7 @@ template:
         {{  states('sensor.inverter_total_yield')   | is_number
         and states('sensor.inverter_total_yield_2') | is_number }}
 
-
+*** TO UPDATE ***
   # Provides the combined daily yield of both inverters, in kWh.
   - sensor:
     - name: "Inverters - Daily Yield"
@@ -341,7 +343,8 @@ template:
       availability: >-
         {{ (states('sensor.inverters_input_power') | is_number) }}
 
-        
+
+*** TO UPDATE ***        
   # Provides the combined status of inverter(s).  If either inverter is in state unknown or an error/stop state
   # then the combined state will be shown as the error/stop state. Otherwise the standby/grid connected state
   # of Inverter 1 will be shown, with Inverter 2 state as a fall back.
@@ -373,6 +376,7 @@ template:
         or (states('sensor.inverter_inverter_state_2') not in [ 'unknown', 'unavailable' ]) }}
 
 
+*** TO UPDATE ***
   # Provides the Temperature of both inverters in °C, with the inverter with the higher temperature being displayed.
   # Note: If either inverter temperature state is 'uknown', then displays the state of the other inverter.
   - sensor:
@@ -388,7 +392,8 @@ template:
         {{ states('sensor.inverter_internal_temperature') != 'unavailable'
         or states('sensor.inverter_internal_temperature_2') != 'unavailable' }}
         
-        
+
+*** TO UPDATE ***        
   # Provides the combined status off-grid status of both inverters. If either inverter is off-grid
   # then the sensor will show this as the overall status both the combined status.
   - sensor:
@@ -406,7 +411,7 @@ template:
         {{ (states('sensor.inverter_off_grid_status') not in [ 'unknown', 'unavailable' ] )
         or (states('sensor.inverter_off_grid_status_2') not in [ 'unknown', 'unavailable' ]) }}
 
-
+*** TO UPDATE ***
 ########### Start: Batteries - Combined values for 2 batteries ###########
 #
 #  Note: If you do NOT have two batteries, these sensors may cause your configuration to not load, due to yaml error
@@ -431,6 +436,7 @@ template:
 
 ########### Start: Power Meter - Calculates the Active Power being consumed in the house from grid, inveters & battery ###########
 
+*** TO UPDATE ***
   # Provides the calculated current load, in Watts, of the house including power being drawn from solar, battery & grid.
   - sensor:
     - name: "House Consumption - Power"
@@ -451,6 +457,9 @@ template:
 
 
 ########### Start: Power Flows - Derive power flows between PV, Batteries, Grid and House ###########
+
+***** REPLACE WITH PEES ??? *****
+
 
   # Calculates the Power (W) being exported from the Battery(s) to the Grid.
   - sensor:
@@ -673,6 +682,18 @@ template:
           and (states('sensor.batteries_charge_discharge_power') not in [ 'unavailable', 'none', 'unknown' ])
           and (states('sensor.inverters_input_power') not in [ 'unknown', 'none', 'unavailable' ])
           and (states('sensor.pro3em_em2_active_power') not in [ 'unavailable', 'none', 'unknown' ]) }}
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 ########### Start: Helpers - Riemann Sum to conver Power (W) to Energy (kWh) ###########
