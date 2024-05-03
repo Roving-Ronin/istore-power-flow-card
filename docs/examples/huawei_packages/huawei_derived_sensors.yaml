@@ -156,6 +156,9 @@ template:
       {{ inverter_1_available or inverter_2_available }}
 
 
+
+*** TO UPDATE ***
+
   # Provides the combined Input Power from PV string of both inverters, in Watts
   - sensor:
     - name: "Inverters - Input Power"
