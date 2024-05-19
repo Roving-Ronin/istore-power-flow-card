@@ -421,15 +421,11 @@ template:
           {% else %}
             {{ inverter_1_grid_status if inverter_1_grid_status not in ['unknown', 'unavailable'] else inverter_2_grid_status }}
           {% endif %}
-      availability: >-
-        {{ (states('sensor.inverter_off_grid_status') not in [ 'unknown', 'unavailable' ] ) or
-           (states('sensor.inverter_off_grid_status_2') not in [ 'unknown', 'unavailable' ]) }}
-
       availability: >
-        {% set inverter_1_available = has_value('sensor.inverter_internal_temperature') %}
+        {% set inverter_1_available = has_value('sensor.inverter_off_grid_status') %}
         {% set inverter_2_available = false %}
         {% if 'sensor.inverter_internal_temperature_2' in states %}
-          {% set inverter_2_available = has_value('sensor.inverter_internal_temperature_2') %}
+          {% set inverter_2_available = has_value('sensor.inverter_off_grid_status_2') %}
         {% endif %}
         {{ inverter_1_available or inverter_2_available }}
 
@@ -453,16 +449,8 @@ template:
         {{ max(battery_temp_1, battery_temp_2) | round(1) }}
       availability: >-
         {{ states('sensor.battery_battery_1_temperature') != 'unavailable'
-        or states('sensor.battery_battery_1_temperature_2') != 'unavailable' }}
+        or states('sensor.battery_battery_2_temperature') != 'unavailable' }}
 
-      availability: >
-        {% set inverter_1_available = has_value('sensor.inverter_internal_temperature') %}
-        {% set inverter_2_available = false %}
-        {% if 'sensor.inverter_internal_temperature_2' in states %}
-          {% set inverter_2_available = has_value('sensor.inverter_internal_temperature_2') %}
-        {% endif %}
-        {{ inverter_1_available or inverter_2_available }}
-        
 
 ########### Start: Power Meter - Calculates the Active Power being consumed in the house from grid, inveters & battery ###########
 
@@ -481,16 +469,9 @@ template:
         {{ max(0, (inverters_power - power_meter_power)) }}
 
       availability: >-
-        {{  states('sensor.inverters_active_power') | is_number and
-            states('sensor.power_meter_active_power') | is_number }}
+        {{ states('sensor.inverters_active_power') | is_number and
+           states('sensor.power_meter_active_power') | is_number }}
 
-      availability: >
-        {% set inverter_1_available = has_value('sensor.inverter_internal_temperature') %}
-        {% set inverter_2_available = false %}
-        {% if 'sensor.inverter_internal_temperature_2' in states %}
-          {% set inverter_2_available = has_value('sensor.inverter_internal_temperature_2') %}
-        {% endif %}
-        {{ inverter_1_available or inverter_2_available }}
         
 ########### Start: Power Flows - Derive power flows between PV, Batteries, Grid and House ###########
 
