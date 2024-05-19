@@ -117,6 +117,7 @@ export interface sunsynkPowerFlowCardConfig extends LovelaceCardConfig {
         animation_speed: number;
         max_power: number;
         aux_name: string;
+        aux_daily_name: string;
         aux_type: string;
         aux_colour: string;
         aux_off_colour: string;
@@ -441,5 +442,6 @@ export interface DataDto {
     PV1Efficiency,
     PV2Efficiency,
     PV3Efficiency,
-    PV4Efficiency
+    PV4Efficiency,
+    gridPercentage
 }

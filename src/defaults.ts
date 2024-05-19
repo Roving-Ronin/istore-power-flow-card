@@ -53,7 +53,7 @@ export default {
         auto_scale: true,
         display_mode: 1,
         dynamic_colour: true,
-        efficiency: 0,
+        efficiency: 3,
     },
     load: {
         colour: '#5fb6ad',
@@ -69,6 +69,7 @@ export default {
         animation_speed: 4,
         max_power: 8000,
         aux_name: localize('common.aux_name'),
+        aux_daily_name: localize('common.daily_aux'),
         aux_type: 'default',
         additional_loads: 0,
         aux_loads: 0,
