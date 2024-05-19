@@ -141,6 +141,7 @@
       "invert_grid": "Inverter Valores",
       "invert_load": "Inverter Valores",
       "shutdown_soc": "Desligamento do SOC",
+      "shutdown_soc_offgrid": "Shutdown SOC (Off Grid)",
       "energy": "Energia",
       "auto_scale": "Escala automática",
       "three_phase": "Trifásico",
@@ -153,6 +154,7 @@
       "show_absolute_aux": "Exibir absoluto_aux",
       "show_nonessential": "Exibir Desnecessário",
       "aux_name": "Nome Aux",
+      "aux_daily_name": "Daily Aux Name",
       "aux_type": "Icone Aux",
       "aux_loads": "Aux Loads",
       "essential_name": "Nome Essencial",
@@ -177,7 +179,8 @@
         "sol": "Entidades de Solar",
         "inv": "Entidades do Inversor",
         "ld": "Entidade do Load",
-        "gri": "Entidade da Rede"
+        "gri": "Entidade da Rede",
+        "sensor": "Optional Sensors"
       }
     }
 }

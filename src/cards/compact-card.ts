@@ -712,9 +712,9 @@ export const compactCard = (config: sunsynkPowerFlowCardConfig, inverterImg: str
                                 <stop offset="${(Number(data.pvPercentageBat < 2 ? 0 : data.pvPercentageBat) + Number(data.gridPercentageBat < 2 ? 0 : data.gridPercentageBat))}%"
                                       stop-color="${Number(data.gridPercentageBat) > 0 ? `${data.gridColour}` : `${data.batteryColour}`}"/>
                                 <stop offset="${(Number(data.pvPercentageBat < 2 ? 0 : data.pvPercentageBat) + Number(data.gridPercentageBat < 2 ? 0 : data.gridPercentageBat))}%"
-                                      stop-color="${Number(data.pvPercentageBat) === 100 ? data.solarColour : (Number(data.gridPercentageBat) === 100 ? data.gridColour : data.batteryColour)}"/>
+                                      stop-color="${data.batteryColour}"/>
                                 <stop offset="100%"
-                                      stop-color="${Number(data.pvPercentageBat) === 100 ? data.solarColour : (Number(data.gridPercentageBat) === 100 ? data.gridColour : data.batteryColour)}"/>
+                                      stop-color="${data.batteryColour}"/>
                             </linearGradient>
                         </defs>
                         <path class="${!config.show_battery ? 'st12' : ''}"
@@ -768,17 +768,17 @@ export const compactCard = (config: sunsynkPowerFlowCardConfig, inverterImg: str
                         <defs>
                             <linearGradient id="Lg" x1="0%" x2="0%" y1="100%" y2="0%">
                                 <stop offset="0%"
-                                      stop-color="${Number(data.batteryPercentage) > 0 ? data.batteryColour : (Number(data.pvPercentage) > 0 ? data.solarColour : data.gridColour)}"/>
-                                <stop offset="${data.batteryPercentage < 2 ? 0 : data.batteryPercentage}%"
-                                      stop-color="${Number(data.batteryPercentage) > 0 ? data.batteryColour : (Number(data.pvPercentage) > 0 ? data.solarColour : data.gridColour)}"/>
-                                <stop offset="${data.batteryPercentage < 2 ? 0 : data.batteryPercentage}%"
-                                      stop-color="${Number(data.pvPercentage) > 0 ? data.solarColour : data.gridColour}"/>
-                                <stop offset="${(Number(data.batteryPercentage < 2 ? 0 : data.batteryPercentage) + Number(data.pvPercentage < 2 ? 0 : data.pvPercentage))}%"
-                                      stop-color="${Number(data.pvPercentage) > 0 ? `${data.solarColour}` : `${data.gridColour}`}"/>
-                                <stop offset="${(Number(data.batteryPercentage < 2 ? 0 : data.batteryPercentage) + Number(data.pvPercentage < 2 ? 0 : data.pvPercentage))}%"
-                                      stop-color="${Number(data.batteryPercentage) === 100 ? data.batteryColour : (Number(data.pvPercentage) === 100 ? data.solarColour : data.gridColour)}"/>
+                                    stop-color="${data.gridPercentage > 0 ? data.gridColour : (data.batteryPercentage > 0 ? data.batteryColour : data.solarColour)}"/>
+                                <stop offset="${data.gridPercentage}%"
+                                    stop-color="${data.gridPercentage > 0 ? data.gridColour : (data.batteryPercentage > 0 ? data.batteryColour : data.solarColour)}"/>
+                                <stop offset="${data.gridPercentage}%"
+                                    stop-color="${data.batteryPercentage > 0 ? data.batteryColour : data.solarColour}"/>
+                                <stop offset="${(data.gridPercentage + data.batteryPercentage)}%"
+                                    stop-color="${data.batteryPercentage > 0 ? data.batteryColour : data.solarColour}"/>
+                                <stop offset="${(data.gridPercentage + data.batteryPercentage)}%"
+                                    stop-color="${data.solarColour}"/>
                                 <stop offset="100%"
-                                      stop-color="${Number(data.batteryPercentage) === 100 ? data.batteryColour : (Number(data.pvPercentage) === 100 ? data.solarColour : data.gridColour)}"/>
+                                    stop-color="${data.solarColour}"/>
                             </linearGradient>
                         </defs>
                         <path fill="${config.load.dynamic_colour ? 'url(#Lg)' : data.loadColour}"

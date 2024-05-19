@@ -440,7 +440,7 @@ export const fullCard = (config: sunsynkPowerFlowCardConfig, inverterImg: string
                           x="${[1, 2].includes(data.additionalAuxLoad) ? '238' : '306'}" y="24"
                           class="st3 left-align"
                           display="${!data.showAux || data.showDailyAux !== true ? 'none' : ''}"
-                          fill="${data.auxDynamicColour}">${localize('common.daily_aux')}
+                          fill="${data.auxDynamicColour}">${config.load.aux_daily_name}
                     </text>
                     <text id="load-power-3P" x="237" y="142"
                           display="${config.inverter.three_phase && config.entities?.load_power_L1 ? '' : 'none'}"
@@ -805,9 +805,9 @@ export const fullCard = (config: sunsynkPowerFlowCardConfig, inverterImg: string
                                 <stop offset="${(Number(data.pvPercentageBat < 2 ? 0 : data.pvPercentageBat) + Number(data.gridPercentageBat < 2 ? 0 : data.gridPercentageBat))}%"
                                       stop-color="${Number(data.gridPercentageBat) > 0 ? `${data.gridColour}` : `${data.batteryColour}`}"/>
                                 <stop offset="${(Number(data.pvPercentageBat < 2 ? 0 : data.pvPercentageBat) + Number(data.gridPercentageBat < 2 ? 0 : data.gridPercentageBat))}%"
-                                      stop-color="${Number(data.pvPercentageBat) === 100 ? data.solarColour : (Number(data.gridPercentageBat) === 100 ? data.gridColour : data.batteryColour)}"/>
+                                      stop-color="${data.batteryColour}"/>
                                 <stop offset="100%"
-                                      stop-color="${Number(data.pvPercentageBat) === 100 ? data.solarColour : (Number(data.gridPercentageBat) === 100 ? data.gridColour : data.batteryColour)}"/>
+                                      stop-color="${data.batteryColour}"/>
                             </linearGradient>
                         </defs>
                         <path class="${!config.show_battery ? 'st12' : ''}"
@@ -1068,20 +1068,20 @@ export const fullCard = (config: sunsynkPowerFlowCardConfig, inverterImg: string
                     <svg xmlns="http://www.w3.org/2000/svg" id="essen_aux" x="373.5"
                          y="${data.essIconSize === 1 ? "82.5" : "78.5"}" width="77"
                          height="77" viewBox="0 0 24 24">
-                        <defs>
+                         <defs>
                             <linearGradient id="Lg" x1="0%" x2="0%" y1="100%" y2="0%">
                                 <stop offset="0%"
-                                      stop-color="${Number(data.batteryPercentage) > 0 ? data.batteryColour : (Number(data.pvPercentage) > 0 ? data.solarColour : data.gridColour)}"/>
-                                <stop offset="${data.batteryPercentage < 2 ? 0 : data.batteryPercentage}%"
-                                      stop-color="${Number(data.batteryPercentage) > 0 ? data.batteryColour : (Number(data.pvPercentage) > 0 ? data.solarColour : data.gridColour)}"/>
-                                <stop offset="${data.batteryPercentage < 2 ? 0 : data.batteryPercentage}%"
-                                      stop-color="${Number(data.pvPercentage) > 0 ? data.solarColour : data.gridColour}"/>
-                                <stop offset="${(Number(data.batteryPercentage < 2 ? 0 : data.batteryPercentage) + Number(data.pvPercentage < 2 ? 0 : data.pvPercentage))}%"
-                                      stop-color="${Number(data.pvPercentage) > 0 ? `${data.solarColour}` : `${data.gridColour}`}"/>
-                                <stop offset="${(Number(data.batteryPercentage < 2 ? 0 : data.batteryPercentage) + Number(data.pvPercentage < 2 ? 0 : data.pvPercentage))}%"
-                                      stop-color="${Number(data.batteryPercentage) === 100 ? data.batteryColour : (Number(data.pvPercentage) === 100 ? data.solarColour : data.gridColour)}"/>
+                                    stop-color="${data.gridPercentage > 0 ? data.gridColour : (data.batteryPercentage > 0 ? data.batteryColour : data.solarColour)}"/>
+                                <stop offset="${data.gridPercentage}%"
+                                    stop-color="${data.gridPercentage > 0 ? data.gridColour : (data.batteryPercentage > 0 ? data.batteryColour : data.solarColour)}"/>
+                                <stop offset="${data.gridPercentage}%"
+                                    stop-color="${data.batteryPercentage > 0 ? data.batteryColour : data.solarColour}"/>
+                                <stop offset="${(data.gridPercentage + data.batteryPercentage)}%"
+                                    stop-color="${data.batteryPercentage > 0 ? data.batteryColour : data.solarColour}"/>
+                                <stop offset="${(data.gridPercentage + data.batteryPercentage)}%"
+                                    stop-color="${data.solarColour}"/>
                                 <stop offset="100%"
-                                      stop-color="${Number(data.batteryPercentage) === 100 ? data.batteryColour : (Number(data.pvPercentage) === 100 ? data.solarColour : data.gridColour)}"/>
+                                    stop-color="${data.solarColour}"/>
                             </linearGradient>
                         </defs>
                         <path display="${[1, 2].includes(data.additionalLoad) && !data.showAux ? '' : 'none'}"
@@ -1090,20 +1090,20 @@ export const fullCard = (config: sunsynkPowerFlowCardConfig, inverterImg: string
                     </svg>
                     <svg xmlns="http://www.w3.org/2000/svg" id="essen_noaux" x="390" y="89" width="38"
                          height="38" viewBox="0 0 24 24">
-                        <defs>
+                         <defs>
                             <linearGradient id="Lg" x1="0%" x2="0%" y1="100%" y2="0%">
                                 <stop offset="0%"
-                                      stop-color="${Number(data.batteryPercentage) > 0 ? data.batteryColour : (Number(data.pvPercentage) > 0 ? data.solarColour : data.gridColour)}"/>
-                                <stop offset="${data.batteryPercentage < 2 ? 0 : data.batteryPercentage}%"
-                                      stop-color="${Number(data.batteryPercentage) > 0 ? data.batteryColour : (Number(data.pvPercentage) > 0 ? data.solarColour : data.gridColour)}"/>
-                                <stop offset="${data.batteryPercentage < 2 ? 0 : data.batteryPercentage}%"
-                                      stop-color="${Number(data.pvPercentage) > 0 ? data.solarColour : data.gridColour}"/>
-                                <stop offset="${(Number(data.batteryPercentage < 2 ? 0 : data.batteryPercentage) + Number(data.pvPercentage < 2 ? 0 : data.pvPercentage))}%"
-                                      stop-color="${Number(data.pvPercentage) > 0 ? `${data.solarColour}` : `${data.gridColour}`}"/>
-                                <stop offset="${(Number(data.batteryPercentage < 2 ? 0 : data.batteryPercentage) + Number(data.pvPercentage < 2 ? 0 : data.pvPercentage))}%"
-                                      stop-color="${Number(data.batteryPercentage) === 100 ? data.batteryColour : (Number(data.pvPercentage) === 100 ? data.solarColour : data.gridColour)}"/>
+                                    stop-color="${data.gridPercentage > 0 ? data.gridColour : (data.batteryPercentage > 0 ? data.batteryColour : data.solarColour)}"/>
+                                <stop offset="${data.gridPercentage}%"
+                                    stop-color="${data.gridPercentage > 0 ? data.gridColour : (data.batteryPercentage > 0 ? data.batteryColour : data.solarColour)}"/>
+                                <stop offset="${data.gridPercentage}%"
+                                    stop-color="${data.batteryPercentage > 0 ? data.batteryColour : data.solarColour}"/>
+                                <stop offset="${(data.gridPercentage + data.batteryPercentage)}%"
+                                    stop-color="${data.batteryPercentage > 0 ? data.batteryColour : data.solarColour}"/>
+                                <stop offset="${(data.gridPercentage + data.batteryPercentage)}%"
+                                    stop-color="${data.solarColour}"/>
                                 <stop offset="100%"
-                                      stop-color="${Number(data.batteryPercentage) === 100 ? data.batteryColour : (Number(data.pvPercentage) === 100 ? data.solarColour : data.gridColour)}"/>
+                                    stop-color="${data.solarColour}"/>
                             </linearGradient>
                         </defs>
                         <path display="${([1, 2].includes(data.additionalLoad) && data.showAux) ? '' : 'none'}"
@@ -1112,20 +1112,20 @@ export const fullCard = (config: sunsynkPowerFlowCardConfig, inverterImg: string
                     </svg>
                     <svg xmlns="http://www.w3.org/2000/svg" id="essen_noaux_four" x="387" y="77" width="50"
                          height="50" viewBox="0 0 24 24">
-                        <defs>
+                         <defs>
                             <linearGradient id="Lg" x1="0%" x2="0%" y1="100%" y2="0%">
                                 <stop offset="0%"
-                                      stop-color="${Number(data.batteryPercentage) > 0 ? data.batteryColour : (Number(data.pvPercentage) > 0 ? data.solarColour : data.gridColour)}"/>
-                                <stop offset="${data.batteryPercentage < 2 ? 0 : data.batteryPercentage}%"
-                                      stop-color="${Number(data.batteryPercentage) > 0 ? data.batteryColour : (Number(data.pvPercentage) > 0 ? data.solarColour : data.gridColour)}"/>
-                                <stop offset="${data.batteryPercentage < 2 ? 0 : data.batteryPercentage}%"
-                                      stop-color="${Number(data.pvPercentage) > 0 ? data.solarColour : data.gridColour}"/>
-                                <stop offset="${(Number(data.batteryPercentage < 2 ? 0 : data.batteryPercentage) + Number(data.pvPercentage < 2 ? 0 : data.pvPercentage))}%"
-                                      stop-color="${Number(data.pvPercentage) > 0 ? `${data.solarColour}` : `${data.gridColour}`}"/>
-                                <stop offset="${(Number(data.batteryPercentage < 2 ? 0 : data.batteryPercentage) + Number(data.pvPercentage < 2 ? 0 : data.pvPercentage))}%"
-                                      stop-color="${Number(data.batteryPercentage) === 100 ? data.batteryColour : (Number(data.pvPercentage) === 100 ? data.solarColour : data.gridColour)}"/>
+                                    stop-color="${data.gridPercentage > 0 ? data.gridColour : (data.batteryPercentage > 0 ? data.batteryColour : data.solarColour)}"/>
+                                <stop offset="${data.gridPercentage}%"
+                                    stop-color="${data.gridPercentage > 0 ? data.gridColour : (data.batteryPercentage > 0 ? data.batteryColour : data.solarColour)}"/>
+                                <stop offset="${data.gridPercentage}%"
+                                    stop-color="${data.batteryPercentage > 0 ? data.batteryColour : data.solarColour}"/>
+                                <stop offset="${(data.gridPercentage + data.batteryPercentage)}%"
+                                    stop-color="${data.batteryPercentage > 0 ? data.batteryColour : data.solarColour}"/>
+                                <stop offset="${(data.gridPercentage + data.batteryPercentage)}%"
+                                    stop-color="${data.solarColour}"/>
                                 <stop offset="100%"
-                                      stop-color="${Number(data.batteryPercentage) === 100 ? data.batteryColour : (Number(data.pvPercentage) === 100 ? data.solarColour : data.gridColour)}"/>
+                                    stop-color="${data.solarColour}"/>
                             </linearGradient>
                         </defs>
                         <path display="${[4].includes(data.additionalLoad) && !data.showAux ? '' : 'none'}"
@@ -1135,20 +1135,20 @@ export const fullCard = (config: sunsynkPowerFlowCardConfig, inverterImg: string
                     <svg xmlns="http://www.w3.org/2000/svg" id="essen_default" x="373.5"
                          y="${data.essIconSize === 1 ? "82.5" : "78.5"}" width="77"
                          height="77" viewBox="0 0 24 24">
-                        <defs>
+                         <defs>
                             <linearGradient id="Lg" x1="0%" x2="0%" y1="100%" y2="0%">
                                 <stop offset="0%"
-                                      stop-color="${Number(data.batteryPercentage) > 0 ? data.batteryColour : (Number(data.pvPercentage) > 0 ? data.solarColour : data.gridColour)}"/>
-                                <stop offset="${data.batteryPercentage < 2 ? 0 : data.batteryPercentage}%"
-                                      stop-color="${Number(data.batteryPercentage) > 0 ? data.batteryColour : (Number(data.pvPercentage) > 0 ? data.solarColour : data.gridColour)}"/>
-                                <stop offset="${data.batteryPercentage < 2 ? 0 : data.batteryPercentage}%"
-                                      stop-color="${Number(data.pvPercentage) > 0 ? data.solarColour : data.gridColour}"/>
-                                <stop offset="${(Number(data.batteryPercentage < 2 ? 0 : data.batteryPercentage) + Number(data.pvPercentage < 2 ? 0 : data.pvPercentage))}%"
-                                      stop-color="${Number(data.pvPercentage) > 0 ? `${data.solarColour}` : `${data.gridColour}`}"/>
-                                <stop offset="${(Number(data.batteryPercentage < 2 ? 0 : data.batteryPercentage) + Number(data.pvPercentage < 2 ? 0 : data.pvPercentage))}%"
-                                      stop-color="${Number(data.batteryPercentage) === 100 ? data.batteryColour : (Number(data.pvPercentage) === 100 ? data.solarColour : data.gridColour)}"/>
+                                    stop-color="${data.gridPercentage > 0 ? data.gridColour : (data.batteryPercentage > 0 ? data.batteryColour : data.solarColour)}"/>
+                                <stop offset="${data.gridPercentage}%"
+                                    stop-color="${data.gridPercentage > 0 ? data.gridColour : (data.batteryPercentage > 0 ? data.batteryColour : data.solarColour)}"/>
+                                <stop offset="${data.gridPercentage}%"
+                                    stop-color="${data.batteryPercentage > 0 ? data.batteryColour : data.solarColour}"/>
+                                <stop offset="${(data.gridPercentage + data.batteryPercentage)}%"
+                                    stop-color="${data.batteryPercentage > 0 ? data.batteryColour : data.solarColour}"/>
+                                <stop offset="${(data.gridPercentage + data.batteryPercentage)}%"
+                                    stop-color="${data.solarColour}"/>
                                 <stop offset="100%"
-                                      stop-color="${Number(data.batteryPercentage) === 100 ? data.batteryColour : (Number(data.pvPercentage) === 100 ? data.solarColour : data.gridColour)}"/>
+                                    stop-color="${data.solarColour}"/>
                             </linearGradient>
                         </defs>
                         <path display="${[1, 2, 3, 4].includes(data.additionalLoad) ? 'none' : ''}"
@@ -1798,7 +1798,7 @@ export const fullCard = (config: sunsynkPowerFlowCardConfig, inverterImg: string
                                         ${config.load.auto_scale ? `${Utils.convertValue(data.essentialPower, data.decimalPlaces) || 0}` : `${data.essentialPower || 0} ${UnitOfPower.WATT}`}
                                     </text>`
                     }
-                    ${config.entities?.nonessential_power
+                    ${config.entities?.nonessential_power && config.entities.nonessential_power !== 'none'
                             ? svg`
                                     <a href="#" @click=${(e) => Utils.handlePopup(e, config.entities.nonessential_power)}>
                                         <text id="non_ess_power" x="338" y="281.5" display="${!config.show_grid || !data.showNonessential ? 'none' : ''}" 
