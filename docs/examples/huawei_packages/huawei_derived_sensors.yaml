@@ -118,6 +118,46 @@ template:
 
 ########### Start: Inverters - Combined values for 2 inverters ###########
 
+  # Provides the combined Rated Capacity both inverters, in Watts.
+  - sensor:
+    - name: "Inverters - Rated Capacity"
+      unique_id: inverters_rated_capacity
+      icon: phu:huawei-solar-inverter
+      unit_of_measurement: 'W'
+      state: >-
+          {% set inverter1 = device_attr('sensor.inverter_input_power', 'model') %}
+          {% set power1 = 0 %}
+          {% if 'SUN2000' in inverter1 %}
+            {% set match1 = inverter1 | regex_findall_index('(\d+)KTL', 0) %}
+            {% if match1 %}
+              {% set number1 = match1 | regex_findall_index('(\d+)', 0) %}
+              {% set power1 = number1 | int * 1000 %}
+            {% endif %}
+          {% elif 'IS-HYB' in inverter1 %}
+            {% set match1 = inverter1 | regex_findall_index('IS-HYB-(\d+)-', 0) %}
+            {% if match1 %}
+              {% set power1 = match1 | int %}
+            {% endif %}
+          {% endif %}
+
+          {% set inverter2 = device_attr('sensor.inverter_input_power_2', 'model') %}
+          {% set power2 = 0 %}
+          {% if 'SUN2000' in inverter2 %}
+            {% set match2 = inverter2 | regex_findall_index('(\d+)KTL', 0) %}
+            {% if match2 %}
+              {% set number2 = match2 | regex_findall_index('(\d+)', 0) %}
+              {% set power2 = number2 | int * 1000 %}
+            {% endif %}
+          {% elif 'IS-HYB' in inverter2 %}
+            {% set match2 = inverter2 | regex_findall_index('IS-HYB-(\d+)-', 0) %}
+            {% if match2 %}
+              {% set power2 = match2 | int %}
+            {% endif %}
+          {% endif %}
+
+          {{ power1 + power2 }}
+
+
   # Provides the combined current Active Power of both inverters, in Watts.
   - sensor:
     - name: "Inverters - Active Power"
