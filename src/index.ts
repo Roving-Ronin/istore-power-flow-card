@@ -590,7 +590,7 @@ export class SunsynkPowerFlowCard extends LitElement {
         let batteryDuration = '';
 
         const battenergy = this.getEntity('battery.energy', {state: config.battery.energy?.toString() ?? ''});
-        let batteryEnergy = battenergy.toNum(0);
+        let batteryEnergy = battenergy.toPower(false);
         if (batteryVoltage && stateBatteryRatedCapacity.notEmpty()) {
             batteryEnergy = Utils.toNum(batteryVoltage * stateBatteryRatedCapacity.toNum(0), 0)
         }
@@ -904,37 +904,60 @@ export class SunsynkPowerFlowCard extends LitElement {
             gridPercentageBat = Utils.toNum(Math.min(gridPercentageRawBat, 100), 0);
         }
 
+        let flowBatColour: string;
+        switch (true) {
+            case pvPercentageBat === 100:
+                flowBatColour = solarColour;
+                break;
+            case gridPercentageBat === 100:
+                flowBatColour = gridColour;
+                break;
+            default:
+                flowBatColour = batteryColour;
+                break;
+        }
+
         //console.log(`${pvPercentageBat} % PV to charge battery, ${gridPercentageBat} % Grid to charge battery`);
 
         let essIcon: string;
         let essIconSize: number;
+        let flowColour: string;
         switch (true) {
             case pvPercentageRaw >= 100 && batteryPercentageRaw <= 5 && (totalGridPower - nonessentialPower) < 50 && config.load.dynamic_icon:
                 essIcon = icons.essPv;
                 essIconSize = 1;
+                flowColour = solarColour;
                 break;
             case batteryPercentageRaw >= 100 && pvPercentageRaw <= 5 && (totalGridPower - nonessentialPower) < 50 && config.load.dynamic_icon:
                 essIcon = icons.essBat;
                 essIconSize = 0;
+                flowColour =batteryColour;
                 break;
             case pvPercentageRaw < 5 && batteryPercentageRaw < 5 && gridPercentage > 0 && config.load.dynamic_icon:
                 essIcon = icons.essGrid;
                 essIconSize = 0;
+                flowColour = gridColour;
                 break;
             default:
                 essIcon = icons.ess;
                 essIconSize = 0;
+                flowColour = loadColour;
                 break;
         }
 
         const {batteryIcon, batteryCharge, stopColour, battery0} = BatteryIconManager.convert(stateBatterySoc)
 
         //Calculate pv efficiency
+        const pv1MaxPower = this.getEntity('solar.pv1_max_power', {state: config.solar.pv1_max_power?.toString() ?? ''});
+        const pv2MaxPower = this.getEntity('solar.pv2_max_power', {state: config.solar.pv2_max_power?.toString() ?? ''});
+        const pv3MaxPower = this.getEntity('solar.pv3_max_power', {state: config.solar.pv3_max_power?.toString() ?? ''});
+        const pv4MaxPower = this.getEntity('solar.pv4_max_power', {state: config.solar.pv4_max_power?.toString() ?? ''});
+
         const totalPVEfficiency = (!config.solar.max_power || config.solar.efficiency === 0) ? 100 : Utils.toNum(Math.min((totalPV / solarMaxPower.toNum()) * 100, 200) ,0); 
-        const PV1Efficiency = (!config.solar.pv1_max_power || config.solar.efficiency === 0) ? 100 : Utils.toNum(Math.min((pv1PowerWatts / config.solar.pv1_max_power) * 100, 200) ,0);
-        const PV2Efficiency = (!config.solar.pv2_max_power || config.solar.efficiency === 0) ? 100 : Utils.toNum(Math.min((pv2PowerWatts / config.solar.pv2_max_power) * 100, 200) ,0);
-        const PV3Efficiency = (!config.solar.pv3_max_power || config.solar.efficiency === 0) ? 100 : Utils.toNum(Math.min((pv3PowerWatts / config.solar.pv3_max_power) * 100, 200) ,0);
-        const PV4Efficiency = (!config.solar.pv4_max_power || config.solar.efficiency === 0) ? 100 : Utils.toNum(Math.min((pv4PowerWatts / config.solar.pv4_max_power) * 100, 200) ,0);
+        const PV1Efficiency = (!config.solar.pv1_max_power || config.solar.efficiency === 0) ? 100 : Utils.toNum(Math.min((pv1PowerWatts / pv1MaxPower.toNum()) * 100, 200) ,0);
+        const PV2Efficiency = (!config.solar.pv2_max_power || config.solar.efficiency === 0) ? 100 : Utils.toNum(Math.min((pv2PowerWatts / pv2MaxPower.toNum()) * 100, 200) ,0);
+        const PV3Efficiency = (!config.solar.pv3_max_power || config.solar.efficiency === 0) ? 100 : Utils.toNum(Math.min((pv3PowerWatts / pv3MaxPower.toNum()) * 100, 200) ,0);
+        const PV4Efficiency = (!config.solar.pv4_max_power || config.solar.efficiency === 0) ? 100 : Utils.toNum(Math.min((pv4PowerWatts / pv4MaxPower.toNum()) * 100, 200) ,0);
         /**
          * The current structure of this data object is intentional, but it is considered temporary.
          * There is a need to evaluate the data being passed, as there might be duplication.
@@ -1109,7 +1132,9 @@ export class SunsynkPowerFlowCard extends LitElement {
             PV2Efficiency,
             PV3Efficiency,
             PV4Efficiency,
-            gridPercentage
+            gridPercentage,
+            flowColour,
+            flowBatColour
         };
 
         if (this.isFullCard) {
