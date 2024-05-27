@@ -127,7 +127,7 @@ template:
       state: >-
           {% set inverter1 = device_attr('sensor.inverter_input_power', 'model') %}
           {% set power1 = 0 %}
-          {% if 'SUN2000' in inverter1 %}
+          {% if 'SUN2000' or 'SUN5000' in inverter1 %}
             {% set match1 = inverter1 | regex_findall_index('(\d+)KTL', 0) %}
             {% if match1 %}
               {% set number1 = match1 | regex_findall_index('(\d+)', 0) %}
@@ -142,7 +142,7 @@ template:
 
           {% set inverter2 = device_attr('sensor.inverter_input_power_2', 'model') %}
           {% set power2 = 0 %}
-          {% if 'SUN2000' in inverter2 %}
+          {% if 'SUN2000' or 'SUN5000' in inverter2 %}
             {% set match2 = inverter2 | regex_findall_index('(\d+)KTL', 0) %}
             {% if match2 %}
               {% set number2 = match2 | regex_findall_index('(\d+)', 0) %}
@@ -156,6 +156,18 @@ template:
           {% endif %}
 
           {{ power1 + power2 }}
+
+
+  # Provides the combined 'Power Derating' value both inverters, in Watts.
+  - sensor:
+    - name: "Inverters - Power Derating Watts"
+      unique_id: inverters_power_derating_watts
+      icon: phu:huawei-solar-inverter
+      unit_of_measurement: 'W'
+      state: >-
+        {% set inverter_1 = states('number.inverter_1_power_derating') | float(0) %}
+        {% set inverter_2 = states('number.inverter_2_power_derating') | float(0) %}
+        {{ (inverter_1 + inverter_2) | round(0) | int }}
 
 
   # Provides the combined current Active Power of both inverters, in Watts.
