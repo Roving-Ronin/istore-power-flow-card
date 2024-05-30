@@ -904,8 +904,6 @@ Example 5 - 2 x M1 3phase inverters with a 15kWh LUNA ESS battery - 4 PV strings
     day_load_energy_84: sensor.house_consumption_energy_daily
     day_grid_import_76: sensor.hs_grid_imported_daily
     day_grid_export_77: sensor.hs_grid_exported_daily
-    day_grid_export_77: sensor.hs_grid_exported_daily
-    day_grid_export_77: sensor.hs_grid_exported_daily
     day_pv_energy_108: sensor.inverters_daily_yield
     day_aux_energy: sensor.sunsynk_card_aux_energy_daily
     inverter_voltage_154: sensor.power_meter_phase_a_voltage
