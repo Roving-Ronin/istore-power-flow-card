@@ -5,17 +5,48 @@ import {Utils} from '../helpers/utils';
 import {UnitOfElectricalCurrent, UnitOfElectricPotential, UnitOfEnergy, UnitOfPower, validGridConnected, validGridDisconnected} from '../const';
 import {icons} from '../helpers/icons';
 
+
 export const fullCard = (config: sunsynkPowerFlowCardConfig, inverterImg: string, data: DataDto) => {
     return html`
         <ha-card>
             <style>
-                .essload-icon {
-                    color: ${data.loadColour} !important;
+                .essload1-icon-small {
+                    color: ${data.dynamicColourEssentialLoad1} !important;
+                    --mdc-icon-size: 20px;
+                }
+
+                .essload2-icon-small {
+                    color: ${data.dynamicColourEssentialLoad2} !important;
+                    --mdc-icon-size: 20px;
+                }
+
+                .essload3-icon-small {
+                    color: ${data.dynamicColourEssentialLoad3} !important;
+                    --mdc-icon-size: 20px;
+                }
+
+                .essload4-icon-small {
+                    color: ${data.dynamicColourEssentialLoad4} !important;
                     --mdc-icon-size: 20px;
                 }
 
                 .essload1-icon {
-                    color: ${data.loadColour} !important;
+                    color: ${data.dynamicColourEssentialLoad1} !important;
+                    --mdc-icon-size: 36px;
+                }
+
+                .essload2-icon {
+                    color: ${data.dynamicColourEssentialLoad2} !important;
+                    --mdc-icon-size: 36px;
+                }
+
+                .essload3-icon {
+                    color: ${data.dynamicColourEssentialLoad3} !important;
+                    --mdc-icon-size: 36px;
+                }
+
+                .essload4-icon {
+                    color: ${data.dynamicColourEssentialLoad4} !important;
                     --mdc-icon-size: 36px;
                 }
 
@@ -39,14 +70,34 @@ export const fullCard = (config: sunsynkPowerFlowCardConfig, inverterImg: string
                     --mdc-icon-size: 70px;
                 }
 
-                .nonessload-icon {
-                    color: ${data.gridColour} !important;
+                .nonessload1-icon {
+                    color: ${data.dynamicColourNonEssentialLoad1} !important;
+                    --mdc-icon-size: 32px;
+                }
+
+                .nonessload2-icon {
+                    color: ${data.dynamicColourNonEssentialLoad2} !important;
+                    --mdc-icon-size: 32px;
+                }
+
+                .nonessload3-icon {
+                    color: ${data.dynamicColourNonEssentialLoad3} !important;
                     --mdc-icon-size: 32px;
                 }
 
                 .noness-icon {
                     color: ${data.gridColour} !important;
                     --mdc-icon-size: 70px;
+                }
+
+                .grid-icon {
+                    color: ${data.customGridIconColour} !important;
+                    --mdc-icon-size: 64px;
+                }
+
+                .grid-icon-small {
+                    color: ${data.customGridIconColour} !important;
+                    --mdc-icon-size: 32px;
                 }
             </style>
             <div class="container card">
@@ -171,46 +222,43 @@ export const fullCard = (config: sunsynkPowerFlowCardConfig, inverterImg: string
                           display="${!config.show_grid ? 'none' : ''}"/>
                     <rect id="noness1" x="304" y="310" width="70" height="20" rx="4.5" ry="4.5"
                           display="${data.nonessentialLoads === 1 ? '' : 'none'}" fill="none"
-                          stroke="${data.gridColour}"
+                          stroke="${data.dynamicColourNonEssentialLoad1}"
                           pointer-events="all"
                           class="${!config.show_grid || !data.showNonessential ? 'st12' : ''}"/>
                     <rect id="noness2" x="303" y="310" width="35" height="20" rx="4.5" ry="4.5"
                           display="${[2, 3].includes(data.nonessentialLoads) ? '' : 'none'}"
-                          fill="none" stroke="${data.gridColour}"
+                          fill="none" stroke="${data.dynamicColourNonEssentialLoad1}"
                           pointer-events="all"
                           class="${!config.show_grid || !data.showNonessential || data.nonessentialLoads === 1 ? 'st12' : ''}"/>
                     <rect id="noness2" x="340" y="310" width="35" height="20" rx="4.5" ry="4.5"
                           display="${[2, 3].includes(data.nonessentialLoads) ? '' : 'none'}"
-                          fill="none" stroke="${data.gridColour}"
+                          fill="none" stroke="${data.dynamicColourNonEssentialLoad2}"
                           pointer-events="all"
                           class="${!config.show_grid || !data.showNonessential || data.nonessentialLoads === 1 ? 'st12' : ''}"/>
                     <rect id="noness3" x="266" y="310" width="35" height="20" rx="4.5" ry="4.5"
                           display="${data.nonessentialLoads === 3 && config.battery.hide_soc ? '' : 'none'}"
-                          fill="none" stroke="${data.gridColour}"
+                          fill="none" stroke="${data.dynamicColourNonEssentialLoad3}"
                           pointer-events="all"
                           class="${!config.show_grid || !data.showNonessential || data.nonessentialLoads === 1 ? 'st12' : ''}"/>
                     <rect id="es-load1" x="374" y="${!data.showAux ? '30' : '143'}" width="70" height="30"
-                          rx="4.5" ry="4.5" fill="none" stroke="${data.loadColour}" pointer-events="all"
+                          rx="4.5" ry="4.5" fill="none" stroke="${data.dynamicColourEssentialLoad1}" pointer-events="all"
                           display="${data.additionalLoad === 1 ? '' : 'none'}"/>
                     <rect id="es-load2" x="${!data.showAux ? '376' : '373'}"
                           y="${!data.showAux ? '30' : '149'}" width="35" height="20" rx="4.5" ry="4.5"
-                          fill="none" stroke="${data.loadColour}" pointer-events="all"
+                          fill="none" stroke="${data.dynamicColourEssentialLoad1}" pointer-events="all"
                           display="${[2, 4].includes(data.additionalLoad) ? '' : 'none'}"/>
                     <rect id="es-load2" x="${!data.showAux ? '413' : '410'}"
                           y="${!data.showAux ? '30' : '149'}" width="35" height="20" rx="4.5" ry="4.5"
-                          fill="none" stroke="${data.loadColour}" pointer-events="all"
+                          fill="none" stroke="${data.dynamicColourEssentialLoad2}" pointer-events="all"
                           display="${[2, 4].includes(data.additionalLoad) ? '' : 'none'}"/>
                     <rect id="es-load4" x="376"
                           y="149" width="35" height="20" rx="4.5" ry="4.5"
-                          fill="none" stroke="${data.loadColour}" pointer-events="all"
+                          fill="none" stroke="${data.dynamicColourEssentialLoad3}" pointer-events="all"
                           display="${!data.showAux && [3, 4].includes(data.additionalLoad) ? '' : 'none'}"/>
                     <rect id="es-load4" x="413"
                           y="149" width="35" height="20" rx="4.5" ry="4.5"
-                          fill="none" stroke="${data.loadColour}" pointer-events="all"
+                          fill="none" stroke="${data.dynamicColourEssentialLoad4}" pointer-events="all"
                           display="${!data.showAux && [3, 4].includes(data.additionalLoad) ? '' : 'none'}"/>
-                    <rect id="es-load3" x="376" y="20" width="70" height="30" rx="4.5" ry="4.5" fill="none"
-                          stroke="${data.loadColour}" pointer-events="all"
-                          display="${!data.showAux && [3].includes(data.additionalLoad) ? '' : 'none'}"/>
                     <rect id="aux-load1" x="374" y="20" width="70" height="25" rx="4.5" ry="4.5" fill="none"
                           stroke="${data.auxDynamicColourLoad1}" pointer-events="all"
                           display="${data.showAux ? '' : 'none'}"
@@ -300,27 +348,27 @@ export const fullCard = (config: sunsynkPowerFlowCardConfig, inverterImg: string
                           fill="${data.loadColour}">${config.load.essential_name}
                     </text>
                     <text id="ess-load1" x="416" y="${!data.showAux ? 70 : 181}" class="st3 left-align"
-                          display="${data.additionalLoad === 1 ? '' : 'none'}" fill="${data.loadColour}">
+                          display="${data.additionalLoad === 1 ? '' : 'none'}" fill="${data.dynamicColourEssentialLoad1}">
                         ${config.load.load1_name}
                     </text>
                     <text id="ess-load2" x="${!data.showAux ? 405 : 402}"
                           y="${!data.showAux ? 59 : 178}" class="st3 st8 right-align"
-                          display="${[2, 4].includes(data.additionalLoad) ? '' : 'none'}" fill="${data.loadColour}">
+                          display="${[2, 4].includes(data.additionalLoad) ? '' : 'none'}" fill="${data.dynamicColourEssentialLoad1}">
                         ${config.load.load1_name}
                     </text>
                     <text id="ess-load2" x="${!data.showAux ? 418 : 415}"
                           y="${!data.showAux ? 59 : 178}" class="st3 st8 left-align"
-                          display="${[2, 4].includes(data.additionalLoad) ? '' : 'none'}" fill="${data.loadColour}">
+                          display="${[2, 4].includes(data.additionalLoad) ? '' : 'none'}" fill="${data.dynamicColourEssentialLoad2}">
                         ${config.load.load2_name}
                     </text>
                     <text id="ess-load4" x="405"
                           y="178" class="st3 st8 right-align"
-                          display="${[4].includes(data.additionalLoad) ? '' : 'none'}" fill="${data.loadColour}">
+                          display="${[4].includes(data.additionalLoad) ? '' : 'none'}" fill="${data.dynamicColourEssentialLoad3}">
                         ${config.load.load3_name}
                     </text>
                     <text id="ess-load4" x="418"
                           y="178" class="st3 st8 left-align"
-                          display="${[4].includes(data.additionalLoad) ? '' : 'none'}" fill="${data.loadColour}">
+                          display="${[4].includes(data.additionalLoad) ? '' : 'none'}" fill="${data.dynamicColourEssentialLoad4}">
                         ${config.load.load4_name}
                     </text>
                     <text id="daily_load_aux" x="${data.additionalAuxLoad === 2 ? '238' : '238'}" y="93"
@@ -364,7 +412,7 @@ export const fullCard = (config: sunsynkPowerFlowCardConfig, inverterImg: string
                           class="st3 left-align"
                           fill="${data.gridShowDailyBuy !== true ? 'transparent' : `${data.gridColour}`}"
                           display="${!config.show_grid ? 'none' : ''}">
-                        ${localize('common.daily_grid_buy')}
+                        ${config.grid.label_daily_grid_buy}
                     </text>
                     <text id="daily_grid_sell" 
                           x="${!data.showNonessential ? '311' : '347'}"
@@ -374,7 +422,7 @@ export const fullCard = (config: sunsynkPowerFlowCardConfig, inverterImg: string
                           class="st3 left-align"
                           fill="${data.gridShowDailySell !== true ? 'transparent' : `${data.gridColour}`}"
                           display="${!config.show_grid ? 'none' : ''}">
-                        ${localize('common.daily_grid_sell')}
+                        ${config.grid.label_daily_grid_sell}
                     </text>
                     <text id="aux_one" x="411" y="82" class="st3 st8"
                           display="${!data.showAux || [1, 2].includes(data.additionalAuxLoad) ? 'none' : ''}"
@@ -388,19 +436,19 @@ export const fullCard = (config: sunsynkPowerFlowCardConfig, inverterImg: string
                     </text>
                     <text id="noness1" x="340" y="338" class="st3 st8"
                           display="${!config.show_grid || !data.showNonessential || [0, 2, 3].includes(data.nonessentialLoads) ? 'none' : ''}"
-                          fill="${data.gridColour}">${config.grid.load1_name}
+                          fill="${data.dynamicColourNonEssentialLoad1}">${config.grid.load1_name}
                     </text>
                     <text id="noness2" x="321" y="338" class="st3 st8"
                           display="${!config.show_grid || !data.showNonessential || [0, 1].includes(data.nonessentialLoads) ? 'none' : ''}"
-                          fill="${data.gridColour}">${config.grid.load1_name}
+                          fill="${data.dynamicColourNonEssentialLoad1}">${config.grid.load1_name}
                     </text>
                     <text id="noness2" x="358" y="338" class="st3 st8"
                           display="${!config.show_grid || !data.showNonessential || [0, 1].includes(data.nonessentialLoads) ? 'none' : ''}"
-                          fill="${data.gridColour}">${config.grid.load2_name}
+                          fill="${data.dynamicColourNonEssentialLoad2}">${config.grid.load2_name}
                     </text>
                     <text id="noness3" x="284" y="338" class="${config.battery.hide_soc ? 'st3 st8' : 'st12'}"
                           display="${!config.show_grid || !data.showNonessential || [0, 1, 2].includes(data.nonessentialLoads) ? 'none' : ''}"
-                          fill="${data.gridColour}">${config.grid.load3_name}
+                          fill="${data.dynamicColourNonEssentialLoad3}">${config.grid.load3_name}
                     </text>
                     <text id="autarkye_value" x="212" y="283"
                           display="${data.enableAutarky === AutarkyType.No ? 'none' : ''}"
@@ -452,12 +500,12 @@ export const fullCard = (config: sunsynkPowerFlowCardConfig, inverterImg: string
                     </text>
                     <text id="battery_soc_184" x="205" y="327" fill=${data.batteryColour}
                           class="${config.battery.hide_soc || !config.show_battery ? 'st12' : 'st14 left-align'}"
-                          display="${[InverterModel.GoodweGridMode, InverterModel.Goodwe, InverterModel.Huawei].includes(data.inverterModel) && config.battery?.shutdown_soc_offgrid ? '' : 'none'}">
+                          display="${!data.inverterProg.show && config.battery?.shutdown_soc_offgrid ? '' : 'none'}">
                         ${data.batteryShutdown}%
                     </text>
                     <text id="battery_soc_184" x="205" y="340" fill=${data.batteryColour}
                           class="${config.battery.hide_soc || !config.show_battery ? 'st12' : 'st14 left-align'}"
-                          display="${[InverterModel.GoodweGridMode, InverterModel.Goodwe, InverterModel.Huawei].includes(data.inverterModel) && config.battery?.shutdown_soc_offgrid ? '' : 'none'}">
+                          display="${!data.inverterProg.show && config.battery?.shutdown_soc_offgrid ? '' : 'none'}">
                         ${data.shutdownOffGrid}%
                     </text>
 
@@ -752,7 +800,7 @@ export const fullCard = (config: sunsynkPowerFlowCardConfig, inverterImg: string
                     </svg>
 
                     <path d="${config.inverter.three_phase ? 'M 180 223 L 180 235' : 'M 180 212 L 180 235'}"
-                          fill="none" stroke="${data.inverterColour}" stroke-width="${data.minLineWidth}" stroke-miterlimit="10"
+                          fill="none" stroke="${config.battery.dynamic_colour && config.load.dynamic_colour ? data.flowInvColour : data.inverterColour}" stroke-width="${data.minLineWidth}" stroke-miterlimit="10"
                           pointer-events="stroke"/>
                     
                     <svg id="load-flow">
@@ -797,14 +845,14 @@ export const fullCard = (config: sunsynkPowerFlowCardConfig, inverterImg: string
                         <defs>
                             <linearGradient id="bLg" x1="0%" x2="0%" y1="100%" y2="0%">
                                 <stop offset="0%"
-                                      stop-color="${Number(data.pvPercentageBat) > 0 ? data.solarColour : (Number(data.gridPercentageBat) > 0 ? data.gridColour : data.batteryColour)}"/>
-                                <stop offset="${data.pvPercentageBat < 2 ? 0 : data.pvPercentageBat}%"
-                                      stop-color="${Number(data.pvPercentageBat) > 0 ? data.solarColour : (Number(data.gridPercentageBat) > 0 ? data.gridColour : data.batteryColour)}"/>
-                                <stop offset="${data.pvPercentageBat < 2 ? 0 : data.pvPercentageBat}%"
-                                      stop-color="${Number(data.gridPercentageBat) > 0 ? data.gridColour : data.batteryColour}"/>
-                                <stop offset="${(Number(data.pvPercentageBat < 2 ? 0 : data.pvPercentageBat) + Number(data.gridPercentageBat < 2 ? 0 : data.gridPercentageBat))}%"
-                                      stop-color="${Number(data.gridPercentageBat) > 0 ? `${data.gridColour}` : `${data.batteryColour}`}"/>
-                                <stop offset="${(Number(data.pvPercentageBat < 2 ? 0 : data.pvPercentageBat) + Number(data.gridPercentageBat < 2 ? 0 : data.gridPercentageBat))}%"
+                                      stop-color="${data.gridPercentageBat > 0 ? data.gridColour : data.pvPercentageBat > 0 ? data.solarColour : data.batteryColour}"/>
+                                <stop offset="${data.gridPercentageBat < 2 ? 0 : data.gridPercentageBat}%"
+                                      stop-color="${data.gridPercentageBat > 0 ? data.gridColour : data.pvPercentageBat > 0 ? data.solarColour : data.batteryColour}"/>
+                                <stop offset="${data.gridPercentageBat < 2 ? 0 : data.gridPercentageBat}%"
+                                      stop-color="${data.pvPercentageBat > 0 ? data.solarColour : data.batteryColour}"/>
+                                <stop offset="${(data.gridPercentageBat < 2 ? 0 : data.gridPercentageBat) + (data.pvPercentageBat < 2 ? 0 : data.pvPercentageBat)}%"
+                                      stop-color="${data.pvPercentageBat > 0 ? data.solarColour : data.batteryColour}"/>
+                                <stop offset="${(data.gridPercentageBat < 2 ? 0 : data.gridPercentageBat) + (data.pvPercentageBat < 2 ? 0 : data.pvPercentageBat)}%"
                                       stop-color="${data.batteryColour}"/>
                                 <stop offset="100%"
                                       stop-color="${data.batteryColour}"/>
@@ -845,7 +893,7 @@ export const fullCard = (config: sunsynkPowerFlowCardConfig, inverterImg: string
                              height="${config.inverter.three_phase ? '34' : '65'}" viewBox="0 0 24 24">
                             <path class="${validGridDisconnected.includes(data.gridStatus.toLowerCase()) ? 'st12' : ''}"
                                   fill="${data.gridColour}"
-                                  display="${!config.show_grid || data.totalGridPower < 0 ? 'none' : ''}"
+                                  display="${!config.show_grid || data.totalGridPower < 0 || config.grid.import_icon ? 'none' : ''}"
                                   d="${icons.gridOn}"/>
                         </svg>
                         <svg xmlns="http://www.w3.org/2000/svg" id="transmission_off"
@@ -854,7 +902,7 @@ export const fullCard = (config: sunsynkPowerFlowCardConfig, inverterImg: string
                              width="${config.inverter.three_phase ? '34' : '65'}"
                              height="${config.inverter.three_phase ? '34' : '65'}" viewBox="0 0 24 24">
                             <path class="${validGridConnected.includes(data.gridStatus.toLowerCase()) ? 'st12' : ''}"
-                                  fill="${data.gridOffColour}" display="${!config.show_grid ? 'none' : ''}"
+                                  fill="${data.gridOffColour}" display="${!config.show_grid || config.grid.disconnected_icon ? 'none' : ''}"
                                   d="${icons.gridOff}"/>
                         </svg>
                         <svg xmlns="http://www.w3.org/2000/svg" id="grid_export"
@@ -864,9 +912,23 @@ export const fullCard = (config: sunsynkPowerFlowCardConfig, inverterImg: string
                              height="${config.inverter.three_phase ? '34' : '65'}" viewBox="0 0 24 24">
                             <path class="${validGridDisconnected.includes(data.gridStatus.toLowerCase()) ? 'st12' : ''}"
                                   fill="${data.gridColour}"
-                                  display="${!config.show_grid || data.totalGridPower >= 0 ? 'none' : ''}"
+                                  display="${!config.show_grid || data.totalGridPower >= 0 || config.grid.export_icon ? 'none' : ''}"
                                   d="${icons.gridExport}"/>
                         </svg>
+                    </a>
+                    <a href="#" @click=${(e) => Utils.handlePopup(e, config.entities.grid_connected_status_194)}>
+                        <g display="${config.show_grid || config.grid.import_icon || config.grid.disconnected_icon || config.grid.export_icon ? '' : 'none'}">
+                            <foreignObject x="${config.inverter.three_phase ? '404' : '389'}" 
+                                           y="${config.inverter.three_phase ? '339' : '308'}" 
+                                           width="${config.inverter.three_phase ? '34' : '65'}" 
+                                           height="${config.inverter.three_phase ? '34' : '65'}" style="position: fixed; ">
+                                <body xmlns="http://www.w3.org/1999/xhtml">
+                                <div style="position: fixed; ">
+                                    <ha-icon icon="${data.customGridIcon}" class="${config.inverter.three_phase ? 'grid-icon-small' : 'grid-icon'}"></ha-icon>
+                                </div>
+                                </body>
+                            </foreignObject>
+                        </g>
                     </a>
 
                     <!-- Nonessential Icon -->
@@ -993,7 +1055,7 @@ export const fullCard = (config: sunsynkPowerFlowCardConfig, inverterImg: string
                         <foreignObject x="306" y="341" width="30" height="30" style="position: fixed; ">
                             <body xmlns="http://www.w3.org/1999/xhtml">
                             <div style="position: fixed; ">
-                                <ha-icon icon="${data.iconNonessentialLoad1}" class="nonessload-icon"></ha-icon>
+                                <ha-icon icon="${data.iconNonessentialLoad1}" class="nonessload1-icon"></ha-icon>
                             </div>
                             </body>
                         </foreignObject>
@@ -1003,7 +1065,7 @@ export const fullCard = (config: sunsynkPowerFlowCardConfig, inverterImg: string
                         <foreignObject x="343" y="341" width="30" height="30" style="position: fixed; ">
                             <body xmlns="http://www.w3.org/1999/xhtml">
                             <div style="position: fixed; ">
-                                <ha-icon icon="${data.iconNonessentialLoad2}" class="nonessload-icon"></ha-icon>
+                                <ha-icon icon="${data.iconNonessentialLoad2}" class="nonessload2-icon"></ha-icon>
                             </div>
                             </body>
                         </foreignObject>
@@ -1014,7 +1076,7 @@ export const fullCard = (config: sunsynkPowerFlowCardConfig, inverterImg: string
                         <foreignObject x="269" y="341" width="30" height="30" style="position: fixed; ">
                             <body xmlns="http://www.w3.org/1999/xhtml">
                             <div style="position: fixed; ">
-                                <ha-icon icon="${data.iconNonessentialLoad3}" class="nonessload-icon"></ha-icon>
+                                <ha-icon icon="${data.iconNonessentialLoad3}" class="nonessload3-icon"></ha-icon>
                             </div>
                             </body>
                         </foreignObject>
@@ -1024,33 +1086,33 @@ export const fullCard = (config: sunsynkPowerFlowCardConfig, inverterImg: string
                          height="32" viewBox="0 0 24 24"
                          opacity="${data.iconNonessentialLoad1 === 'default' ? '1' : '0'}">
                         <path display="${!config.show_grid || !data.showNonessential || [0, 2, 3].includes(data.nonessentialLoads) ? 'none' : ''}"
-                              fill="${data.gridColour}"
+                              fill="${data.dynamicColourNonEssentialLoad1}"
                               d="${icons.nonEss}"/>
                     </svg>
                     <svg xmlns="http://www.w3.org/2000/svg" id="noness1_boiler" x="324.5" y="341" width="32"
                          height="32" viewBox="0 0 24 24"
                          opacity="${data.iconNonessentialLoad1 === 'boiler' ? '1' : '0'}">
                         <path display="${!config.show_grid || !data.showNonessential || [0, 2, 3].includes(data.nonessentialLoads) ? 'none' : ''}"
-                              fill="${data.gridColour}"
+                              fill="${data.dynamicColourNonEssentialLoad1}"
                               d="${icons.boiler}"/>
                     </svg>
                     <svg xmlns="http://www.w3.org/2000/svg" id="noness1_pump" x="324.5" y="341" width="32"
                          height="32" viewBox="0 0 24 24" opacity="${data.iconNonessentialLoad1 === 'pump' ? '1' : '0'}">
                         <path display="${!config.show_grid || !data.showNonessential || [0, 2, 3].includes(data.nonessentialLoads) ? 'none' : ''}"
-                              fill="${data.gridColour}"
+                              fill="${data.dynamicColourNonEssentialLoad1}"
                               d="${icons.pump}"/>
                     </svg>
                     <svg xmlns="http://www.w3.org/2000/svg" id="noness1_oven" x="324.5" y="341" width="32"
                          height="32" viewBox="0 0 32 32" opacity="${data.iconNonessentialLoad1 === 'oven' ? '1' : '0'}">
                         <path display="${!config.show_grid || !data.showNonessential || [0, 2, 3].includes(data.nonessentialLoads) ? 'none' : ''}"
-                              fill="${data.gridColour}"
+                              fill="${data.dynamicColourNonEssentialLoad1}"
                               d="${icons.oven}"/>
                     </svg>
                     <svg xmlns="http://www.w3.org/2000/svg" id="noness1_ac" x="326.5" y="345" width="25"
                          height="25" viewBox="0 0 24 24"
                          opacity="${data.iconNonessentialLoad1 === 'aircon' ? '1' : '0'}">
                         <path display="${!config.show_grid || !data.showNonessential || [0, 2, 3].includes(data.nonessentialLoads) ? 'none' : ''}"
-                              fill="${data.gridColour}"
+                              fill="${data.dynamicColourNonEssentialLoad1}"
                               d="${icons.aircon}"/>
                     </svg>
 
@@ -1058,7 +1120,7 @@ export const fullCard = (config: sunsynkPowerFlowCardConfig, inverterImg: string
                         <foreignObject x="324.5" y="341" width="30" height="30" style="position: fixed; ">
                             <body xmlns="http://www.w3.org/1999/xhtml">
                             <div style="position: fixed; ">
-                                <ha-icon icon="${data.iconNonessentialLoad1}" class="nonessload-icon"></ha-icon>
+                                <ha-icon icon="${data.iconNonessentialLoad1}" class="nonessload1-icon"></ha-icon>
                             </div>
                             </body>
                         </foreignObject>
@@ -1248,42 +1310,42 @@ export const fullCard = (config: sunsynkPowerFlowCardConfig, inverterImg: string
                          width="24" height="24" viewBox="0 0 24 24"
                          opacity="${data.iconEssentialLoad1 === 'boiler' && [2].includes(data.additionalLoad) ? '1' : '0'}">
                         <path display="${data.showAux && [2].includes(data.additionalLoad) ? '' : 'none'}"
-                              fill="${data.loadColour}"
+                              fill="${data.dynamicColourEssentialLoad1}"
                               d="${icons.boiler}"/>
                     </svg>
                     <svg xmlns="http://www.w3.org/2000/svg" id="ess_boiler_right_bottom" x="427" y="123"
                          width="24" height="24" viewBox="0 0 24 24"
                          opacity="${data.iconEssentialLoad2 === 'boiler' && [2].includes(data.additionalLoad) ? '1' : '0'}">
                         <path display="${data.showAux && [2].includes(data.additionalLoad) ? '' : 'none'}"
-                              fill="${data.loadColour}"
+                              fill="${data.dynamicColourEssentialLoad2}"
                               d="${icons.boiler}"/>
                     </svg>
                     <svg xmlns="http://www.w3.org/2000/svg" id="ess_boiler_left_top" x="382" y="5" width="24"
                          height="24" viewBox="0 0 24 24"
                          opacity="${data.iconEssentialLoad1 === 'boiler' && [2, 4].includes(data.additionalLoad) && !data.showAux ? '1' : '0'}">
                         <path display="${[2, 4].includes(data.additionalLoad)  ? '' : 'none'}"
-                              fill="${data.loadColour}"
+                              fill="${data.dynamicColourEssentialLoad1}"
                               d="${icons.boiler}"/>
                     </svg>
                     <svg xmlns="http://www.w3.org/2000/svg" id="ess_boiler_right_top" x="419" y="5" width="24"
                          height="24" viewBox="0 0 24 24"
                          opacity="${data.iconEssentialLoad2 === 'boiler' && [2, 4].includes(data.additionalLoad) && !data.showAux ? '1' : '0'}">
                         <path display="${[2, 4].includes(data.additionalLoad) ? '' : 'none'}"
-                              fill="${data.loadColour}"
+                              fill="${data.dynamicColourEssentialLoad2}"
                               d="${icons.boiler}"/>
                     </svg>
                     <svg xmlns="http://www.w3.org/2000/svg" id="ess_boiler_aux" x="340" y="140" width="36"
                          height="36" viewBox="0 0 24 24"
                          opacity="${data.iconEssentialLoad1 === 'boiler' && data.additionalLoad === 1 ? '1' : '0'}">
                         <path display="${data.showAux && [1].includes(data.additionalLoad) ? '' : 'none'}"
-                              fill="${data.loadColour}"
+                              fill="${data.dynamicColourEssentialLoad1}"
                               d="${icons.boiler}"/>
                     </svg>
                     <svg xmlns="http://www.w3.org/2000/svg" id="ess_boiler_noaux" x="340" y="27" width="36"
                          height="36" viewBox="0 0 24 24"
                          opacity="${data.iconEssentialLoad1 === 'boiler' && data.additionalLoad === 1 && !data.showAux ? '1' : '0'}">
                         <path display="${[1].includes(data.additionalLoad) ? '' : 'none'}"
-                              fill="${data.loadColour}"
+                              fill="${data.dynamicColourEssentialLoad1}"
                               d="${icons.boiler}"/>
                     </svg>
 
@@ -1292,42 +1354,42 @@ export const fullCard = (config: sunsynkPowerFlowCardConfig, inverterImg: string
                          height="20" viewBox="0 0 24 24"
                          opacity="${data.iconEssentialLoad1 === 'aircon' && [2].includes(data.additionalLoad) ? '1' : '0'}">
                         <path display="${data.showAux && [2].includes(data.additionalLoad) ? '' : 'none'}"
-                              fill="${data.loadColour}"
+                              fill="${data.dynamicColourEssentialLoad1}"
                               d="${icons.aircon}"/>
                     </svg>
                     <svg xmlns="http://www.w3.org/2000/svg" id="ess_ac_right_bottom" x="429" y="124" width="20"
                          height="20" viewBox="0 0 24 24"
                          opacity="${data.iconEssentialLoad2 === 'aircon' && [2, 3, 4].includes(data.additionalLoad) ? '1' : '0'}">
                         <path display="${data.showAux && [2].includes(data.additionalLoad) ? '' : 'none'}"
-                              fill="${data.loadColour}"
+                              fill="${data.dynamicColourEssentialLoad2}"
                               d="${icons.aircon}"/>
                     </svg>
                     <svg xmlns="http://www.w3.org/2000/svg" id="ess_ac_left_top" x="382" y="6" width="20"
                          height="20" viewBox="0 0 24 24"
                          opacity="${data.iconEssentialLoad1 === 'aircon' && [2, 4].includes(data.additionalLoad) && !data.showAux ? '1' : '0'}">
                         <path display="${[2, 4].includes(data.additionalLoad) ? '' : 'none'}"
-                              fill="${data.loadColour}"
+                              fill="${data.dynamicColourEssentialLoad1}"
                               d="${icons.aircon}"/>
                     </svg>
                     <svg xmlns="http://www.w3.org/2000/svg" id="ess_ac_right_top" x="419" y="6" width="20"
                          height="20" viewBox="0 0 24 24"
                          opacity="${data.iconEssentialLoad2 === 'aircon' && [2, 4].includes(data.additionalLoad) && !data.showAux ? '1' : '0'}">
                         <path display="${[2, 4].includes(data.additionalLoad) ? '' : 'none'}"
-                              fill="${data.loadColour}"
+                              fill="${data.dynamicColourEssentialLoad2}"
                               d="${icons.aircon}"/>
                     </svg>
                     <svg xmlns="http://www.w3.org/2000/svg" id="ess_ac_aux" x="342" y="143" width="30"
                          height="30" viewBox="0 0 24 24"
                          opacity="${data.iconEssentialLoad1 === 'aircon' && data.additionalLoad === 1 ? '1' : '0'}">
                         <path display="${data.showAux && [1].includes(data.additionalLoad) ? '' : 'none'}"
-                              fill="${data.loadColour}"
+                              fill="${data.dynamicColourEssentialLoad1}"
                               d="${icons.aircon}"/>
                     </svg>
                     <svg xmlns="http://www.w3.org/2000/svg" id="ess_ac_noaux" x="342" y="30" width="30"
                          height="30" viewBox="0 0 24 24"
                          opacity="${data.iconEssentialLoad1 === 'aircon' && data.additionalLoad === 1 && !data.showAux ? '1' : '0'}">
                         <path display="${[1].includes(data.additionalLoad) ? '' : 'none'}"
-                              fill="${data.loadColour}"
+                              fill="${data.dynamicColourEssentialLoad1}"
                               d="${icons.aircon}"/>
                     </svg>
 
@@ -1336,42 +1398,42 @@ export const fullCard = (config: sunsynkPowerFlowCardConfig, inverterImg: string
                          height="25" viewBox="0 0 24 24"
                          opacity="${data.iconEssentialLoad1 === 'pump' && [2].includes(data.additionalLoad) ? '1' : '0'}">
                         <path display="${data.showAux && [2].includes(data.additionalLoad) ? '' : 'none'}"
-                              fill="${data.loadColour}"
+                              fill="${data.dynamicColourEssentialLoad1}"
                               d="${icons.pump}"/>
                     </svg>
                     <svg xmlns="http://www.w3.org/2000/svg" id="ess_pump_right_bottom" x="429" y="125"
                          width="20" height="25" viewBox="0 0 24 24"
                          opacity="${data.iconEssentialLoad2 === 'pump' && [2].includes(data.additionalLoad) ? '1' : '0'}">
                         <path display="${data.showAux && [2].includes(data.additionalLoad) ? '' : 'none'}"
-                              fill="${data.loadColour}"
+                              fill="${data.dynamicColourEssentialLoad2}"
                               d="${icons.pump}"/>
                     </svg>
                     <svg xmlns="http://www.w3.org/2000/svg" id="ess_pump_left_top" x="383" y="7" width="20"
                          height="25" viewBox="0 0 24 24"
                          opacity="${data.iconEssentialLoad1 === 'pump' && [2, 4].includes(data.additionalLoad) && !data.showAux ? '1' : '0'}">
                         <path display="${[2, 4].includes(data.additionalLoad) ? '' : 'none'}"
-                              fill="${data.loadColour}"
+                              fill="${data.dynamicColourEssentialLoad1}"
                               d="${icons.pump}"/>
                     </svg>
                     <svg xmlns="http://www.w3.org/2000/svg" id="ess_pump_right_top" x="421" y="7" width="20"
                          height="25" viewBox="0 0 24 24"
                          opacity="${data.iconEssentialLoad2 === 'pump' && [2, 4].includes(data.additionalLoad) && !data.showAux ? '1' : '0'}">
                         <path display="${[2, 4].includes(data.additionalLoad) ? '' : 'none'}"
-                              fill="${data.loadColour}"
+                              fill="${data.dynamicColourEssentialLoad2}"
                               d="${icons.pump}"/>
                     </svg>
                     <svg xmlns="http://www.w3.org/2000/svg" id="ess_pump_aux" x="336" y="140" width="36"
                          height="36" viewBox="0 0 24 24"
                          opacity="${data.iconEssentialLoad1 === 'pump' && data.additionalLoad === 1 ? '1' : '0'}">
                         <path display="${data.showAux && [1].includes(data.additionalLoad) ? '' : 'none'}"
-                              fill="${data.loadColour}"
+                              fill="${data.dynamicColourEssentialLoad1}"
                               d="${icons.pump}"/>
                     </svg>
                     <svg xmlns="http://www.w3.org/2000/svg" id="ess_pump_noaux" x="336" y="27" width="36"
                          height="36" viewBox="0 0 24 24"
                          opacity="${data.iconEssentialLoad1 === 'pump' && data.additionalLoad === 1 && !data.showAux ? '1' : '0'}">
                         <path display="${[1].includes(data.additionalLoad) ? '' : 'none'}"
-                              fill="${data.loadColour}"
+                              fill="${data.dynamicColourEssentialLoad1}"
                               d="${icons.pump}"/>
                     </svg>
 
@@ -1380,42 +1442,42 @@ export const fullCard = (config: sunsynkPowerFlowCardConfig, inverterImg: string
                          height="20" viewBox="0 0 32 32"
                          opacity="${data.iconEssentialLoad1 === 'oven' && [2].includes(data.additionalLoad) ? '1' : '0'}">
                         <path display="${data.showAux && [2].includes(data.additionalLoad) ? '' : 'none'}"
-                              fill="${data.loadColour}"
+                              fill="${data.dynamicColourEssentialLoad1}"
                               d="${icons.oven}"/>
                     </svg>
                     <svg xmlns="http://www.w3.org/2000/svg" id="ess_oven_right_bottom" x="429" y="126"
                          width="20" height="20" viewBox="0 0 32 32"
                          opacity="${data.iconEssentialLoad2 === 'oven' && [2].includes(data.additionalLoad) ? '1' : '0'}">
                         <path display="${data.showAux && [2].includes(data.additionalLoad) ? '' : 'none'}"
-                              fill="${data.loadColour}"
+                              fill="${data.dynamicColourEssentialLoad2}"
                               d="${icons.oven}"/>
                     </svg>
                     <svg xmlns="http://www.w3.org/2000/svg" id="ess_oven_left_top" x="382" y="5" width="24"
                          height="24" viewBox="0 0 32 32"
                          opacity="${data.iconEssentialLoad1 === 'oven' && [2, 4].includes(data.additionalLoad) && !data.showAux ? '1' : '0'}">
                         <path display="${[2, 4].includes(data.additionalLoad) ? '' : 'none'}"
-                              fill="${data.loadColour}"
+                              fill="${data.dynamicColourEssentialLoad1}"
                               d="${icons.oven}"/>
                     </svg>
                     <svg xmlns="http://www.w3.org/2000/svg" id="ess_oven_right_top" x="419" y="5" width="24"
                          height="24" viewBox="0 0 32 32"
                          opacity="${data.iconEssentialLoad2 === 'oven' && [2, 4].includes(data.additionalLoad) && !data.showAux ? '1' : '0'}">
                         <path display="${[2, 4].includes(data.additionalLoad) ? '' : 'none'}"
-                              fill="${data.loadColour}"
+                              fill="${data.dynamicColourEssentialLoad2}"
                               d="${icons.oven}"/>
                     </svg>
                     <svg xmlns="http://www.w3.org/2000/svg" id="ess_oven_noaux" x="336" y="27" width="36"
                          height="36" viewBox="0 0 32 32"
                          opacity="${data.iconEssentialLoad1 === 'oven' && data.additionalLoad === 1 && !data.showAux ? '1' : '0'}">
                         <path display="${[1].includes(data.additionalLoad) ? '' : 'none'}"
-                              fill="${data.loadColour}"
+                              fill="${data.dynamicColourEssentialLoad1}"
                               d="${icons.oven}"/>
                     </svg>
                     <svg xmlns="http://www.w3.org/2000/svg" id="ess_oven_aux" x="336" y="140" width="36"
                          height="36" viewBox="0 0 32 32"
                          opacity="${data.iconEssentialLoad1 === 'oven' && data.additionalLoad === 1 ? '1' : '0'}">
                         <path display="${data.showAux && [1].includes(data.additionalLoad) ? '' : 'none'}"
-                              fill="${data.loadColour}"
+                              fill="${data.dynamicColourEssentialLoad1}"
                               d="${icons.oven}"/>
                     </svg>
 
@@ -1425,7 +1487,7 @@ export const fullCard = (config: sunsynkPowerFlowCardConfig, inverterImg: string
                                        style="position: fixed; ">
                             <body xmlns="http://www.w3.org/1999/xhtml">
                             <div style="position: fixed; ">
-                                <ha-icon icon="${data.iconEssentialLoad1}" class="essload-icon"></ha-icon>
+                                <ha-icon icon="${data.iconEssentialLoad1}" class="essload1-icon-small"></ha-icon>
                             </div>
                             </body>
                         </foreignObject>
@@ -1437,7 +1499,7 @@ export const fullCard = (config: sunsynkPowerFlowCardConfig, inverterImg: string
                                        style="position: fixed;">
                             <body xmlns="http://www.w3.org/1999/xhtml">
                             <div style="position: fixed;">
-                                <ha-icon icon="${data.iconEssentialLoad2}" class="essload-icon"></ha-icon>
+                                <ha-icon icon="${data.iconEssentialLoad2}" class="essload2-icon-small"></ha-icon>
                             </div>
                             </body>
                         </foreignObject>
@@ -1448,7 +1510,7 @@ export const fullCard = (config: sunsynkPowerFlowCardConfig, inverterImg: string
                                        style="position: fixed; ">
                             <body xmlns="http://www.w3.org/1999/xhtml">
                             <div style="position: fixed; ">
-                                <ha-icon icon="${data.iconEssentialLoad3}" class="essload-icon"></ha-icon>
+                                <ha-icon icon="${data.iconEssentialLoad3}" class="essload3-icon-small"></ha-icon>
                             </div>
                             </body>
                         </foreignObject>
@@ -1460,7 +1522,7 @@ export const fullCard = (config: sunsynkPowerFlowCardConfig, inverterImg: string
                                        style="position: fixed;">
                             <body xmlns="http://www.w3.org/1999/xhtml">
                             <div style="position: fixed;">
-                                <ha-icon icon="${data.iconEssentialLoad4}" class="essload-icon"></ha-icon>
+                                <ha-icon icon="${data.iconEssentialLoad4}" class="essload4-icon-small"></ha-icon>
                             </div>
                             </body>
                         </foreignObject>
@@ -1664,7 +1726,7 @@ export const fullCard = (config: sunsynkPowerFlowCardConfig, inverterImg: string
                     <a href="#" @click=${(e) => Utils.handlePopup(e, config.entities.essential_load1_extra)}>
                         <text id="ess_load1_value_extra" x="430" y="23"
                               display="${config.entities?.essential_load1_extra && data.additionalLoad === 1 && !data.showAux && data.stateEssentialLoad1Extra.isValid() ? '' : 'none'}"
-                              class="st3 right-align" fill="${data.loadColour}">
+                              class="st3 right-align" fill="${data.dynamicColourEssentialLoad1}">
                             ${data.stateEssentialLoad1Extra.toNum(1)}
                             ${data.stateEssentialLoad1Extra?.getUOM()}
                         </text>
@@ -1672,7 +1734,7 @@ export const fullCard = (config: sunsynkPowerFlowCardConfig, inverterImg: string
                     <a href="#" @click=${(e) => Utils.handlePopup(e, config.entities.essential_load1_extra)}>
                         <text id="ess_load1_value_extra" x="360" y="136"
                               display="${config.entities?.essential_load1_extra && data.additionalLoad === 1 && data.showAux && data.stateEssentialLoad1Extra.isValid() ? '' : 'none'}"
-                              class="st3 st8" fill="${data.loadColour}">
+                              class="st3 st8" fill="${data.dynamicColourEssentialLoad1}">
                             ${data.stateEssentialLoad1Extra.toNum(1)}
                             ${data.stateEssentialLoad1Extra?.getUOM()}
                         </text>
@@ -1680,7 +1742,7 @@ export const fullCard = (config: sunsynkPowerFlowCardConfig, inverterImg: string
                     <a href="#" @click=${(e) => Utils.handlePopup(e, config.entities.essential_load1_extra)}>
                         <text id="ess_load2_value_extra" x="405" y="70"
                               display="${config.entities?.essential_load1_extra && [2, 4].includes(data.additionalLoad) && !data.showAux && data.stateEssentialLoad1Extra.isValid() ? '' : 'none'}"
-                              class="st3 right-align" fill="${data.loadColour}">
+                              class="st3 right-align" fill="${data.dynamicColourEssentialLoad1}">
                             ${data.stateEssentialLoad1Extra.toNum(1)}
                             ${data.stateEssentialLoad1Extra?.getUOM()}
                         </text>
@@ -1688,7 +1750,7 @@ export const fullCard = (config: sunsynkPowerFlowCardConfig, inverterImg: string
                     <a href="#" @click=${(e) => Utils.handlePopup(e, config.entities.essential_load2_extra)}>
                         <text id="ess_load2_value_extra" x="418" y="70"
                               display="${config.entities?.essential_load2_extra && [2, 4].includes(data.additionalLoad) && !data.showAux && data.stateEssentialLoad2Extra.isValid() ? '' : 'none'}"
-                              class="st3 left-align" fill="${data.loadColour}">
+                              class="st3 left-align" fill="${data.dynamicColourEssentialLoad2}">
                             ${data.stateEssentialLoad2Extra.toNum(1)}
                             ${data.stateEssentialLoad2Extra?.getUOM()}
                         </text>
@@ -1696,7 +1758,7 @@ export const fullCard = (config: sunsynkPowerFlowCardConfig, inverterImg: string
                     <a href="#" @click=${(e) => Utils.handlePopup(e, config.entities.non_essential_load1_extra)}>
                         <text id="non_ess_load1_value_extra" x="330" y="305"
                               display="${config.entities?.non_essential_load1_extra && [1, 2].includes(data.nonessentialLoads) && data.stateNonEssentialLoad1Extra.isValid() && config.show_grid ? '' : 'none'}"
-                              class="st3 right-align" fill="${data.gridColour}">
+                              class="st3 right-align" fill="${data.dynamicColourNonEssentialLoad1}">
                             ${data.stateNonEssentialLoad1Extra.toNum(1)}
                             ${data.stateNonEssentialLoad1Extra?.getUOM()}
                         </text>
@@ -1704,7 +1766,7 @@ export const fullCard = (config: sunsynkPowerFlowCardConfig, inverterImg: string
                     <a href="#" @click=${(e) => Utils.handlePopup(e, config.entities.non_essential_load2_extra)}>
                         <text id="non_ess_load2_value_extra" x="348" y="305"
                               display="${config.entities?.non_essential_load2_extra && data.nonessentialLoads === 2 &&  data.stateNonEssentialLoad2Extra.isValid() && config.show_grid ? '' : 'none'}"
-                              class="st3 left-align" fill="${data.gridColour}">
+                              class="st3 left-align" fill="${data.dynamicColourNonEssentialLoad2}">
                             ${data.stateNonEssentialLoad2Extra.toNum(1)}
                             ${data.stateNonEssentialLoad2Extra?.getUOM()}
                         </text>
@@ -1898,28 +1960,28 @@ export const fullCard = (config: sunsynkPowerFlowCardConfig, inverterImg: string
                     <a href="#" @click=${(e) => Utils.handlePopup(e, config.entities.non_essential_load1)}>
                         <text id="noness1_value" x="340" y="321" class="st3" 
                               display="${!config.show_grid || !data.showNonessential || [0, 2, 3].includes(data.nonessentialLoads) || !data.stateNonessentialLoad1.isValid() ? 'none' : ''}" 
-                              fill="${data.gridColour}">
+                              fill="${data.dynamicColourNonEssentialLoad1}">
                             ${data.stateNonessentialLoad1.toPowerString(config.grid.auto_scale, data.decimalPlaces)}
                         </text>
                     </a>
                     <a href="#" @click=${(e) => Utils.handlePopup(e, config.entities.non_essential_load1)}>
                         <text id="noness2_value" x="320" y="321" class="st3" 
                               display="${!config.show_grid || !data.showNonessential || [0, 1].includes(data.nonessentialLoads) || !data.stateNonessentialLoad1.isValid() ? 'none' : ''}" 
-                              fill="${data.gridColour}">
+                              fill="${data.dynamicColourNonEssentialLoad1}">
                             ${data.stateNonessentialLoad1.toPowerString(config.grid.auto_scale, data.decimalPlaces)}
                         </text>
                     </a>
                     <a href="#" @click=${(e) => Utils.handlePopup(e, config.entities.non_essential_load2)}>
                         <text id="noness2_value" x="357" y="321" class="st3" 
                               display="${!config.show_grid || !data.showNonessential || [0, 1].includes(data.nonessentialLoads) || !data.stateNonessentialLoad2.isValid() ? 'none' : ''}" 
-                              fill="${data.gridColour}">
+                              fill="${data.dynamicColourNonEssentialLoad2}">
                             ${data.stateNonessentialLoad2.toPowerString(config.grid.auto_scale, data.decimalPlaces)}
                         </text>
                     </a>
                     <a href="#" @click=${(e) => Utils.handlePopup(e, config.entities.non_essential_load3)}>
                         <text id="noness3_value" x="283" y="321" class="${config.battery.hide_soc ? 'st3' : 'st12'}" 
                               display="${!config.show_grid || !data.showNonessential || [0, 1, 2].includes(data.nonessentialLoads) || !data.stateNonessentialLoad3.isValid() ? 'none' : ''}" 
-                              fill="${data.gridColour}">
+                              fill="${data.dynamicColourNonEssentialLoad3}">
                             ${data.stateNonessentialLoad3.toPowerString(config.grid.auto_scale, data.decimalPlaces)}
                         </text>
                     </a>
@@ -1927,35 +1989,35 @@ export const fullCard = (config: sunsynkPowerFlowCardConfig, inverterImg: string
                         <text id="ess_load1_value" x="409" y="${!data.showAux ? '47' : '158'}" 
                               display="${data.additionalLoad === 1 && data.stateEssentialLoad1.isValid() ? '' : 'none'}" 
                               class="${data.largeFont !== true ? 'st14' : 'st4'} st8" 
-                              fill="${data.loadColour}">
+                              fill="${data.dynamicColourEssentialLoad1}">
                             ${data.stateEssentialLoad1.toPowerString(config.load.auto_scale, data.decimalPlaces)}
                         </text>
                     </a>
                     <a href="#" @click=${(e) => Utils.handlePopup(e, config.entities.essential_load1)}>
                         <text id="ess_load2_value" x="${!data.showAux ? '394' : '391'}" y="${!data.showAux ? '41' : '160'}" 
                               display="${[2, 4].includes(data.additionalLoad) && data.stateEssentialLoad2.isValid() ? '' : 'none'}" class="st3" 
-                              fill="${data.loadColour}">
+                              fill="${data.dynamicColourEssentialLoad1}">
                             ${data.stateEssentialLoad1.toPowerString(config.load.auto_scale, data.decimalPlaces)}
                         </text>
                     </a>
                     <a href="#" @click=${(e) => Utils.handlePopup(e, config.entities.essential_load2)}>
                         <text id="ess_load2_value" x="${!data.showAux ? '430' : '427'}" y="${!data.showAux ? '41' : '160'}" 
                               display="${[2, 4].includes(data.additionalLoad) && data.stateEssentialLoad2.isValid() ? '' : 'none'}" class="st3" 
-                              fill="${data.loadColour}">
+                              fill="${data.dynamicColourEssentialLoad2}">
                             ${data.stateEssentialLoad2.toPowerString(config.load.auto_scale, data.decimalPlaces)}
                         </text>
                     </a>
                     <a href="#" @click=${(e) => Utils.handlePopup(e, config.entities.essential_load3)}>
                         <text id="ess_load4_value" x="392" y="160" 
                               display="${[4].includes(data.additionalLoad) && data.stateEssentialLoad3.isValid() ? '' : 'none'}" class="st3" 
-                              fill="${data.loadColour}">
+                              fill="${data.dynamicColourEssentialLoad3}">
                             ${data.stateEssentialLoad3.toPowerString(config.load.auto_scale, data.decimalPlaces)}
                         </text>
                     </a>
                     <a href="#" @click=${(e) => Utils.handlePopup(e, config.entities.essential_load4)}>
                         <text id="ess_load4_value" x="430" y="160" 
                               display="${[4].includes(data.additionalLoad) && data.stateEssentialLoad4.isValid() ? '' : 'none'}" class="st3" 
-                              fill="${data.loadColour}">
+                              fill="${data.dynamicColourEssentialLoad4}">
                             ${data.stateEssentialLoad4.toPowerString(config.load.auto_scale, data.decimalPlaces)}
                         </text>
                     </a>
@@ -1964,12 +2026,17 @@ export const fullCard = (config: sunsynkPowerFlowCardConfig, inverterImg: string
                                     <a href="#" @click=${(e) => Utils.handlePopup(e, config.entities.energy_cost_buy)}>
                                         <text id="energy_cost" x="414" y="305" class="${!config.show_grid ? 'st12' : 'st3 right-align'}" 
                                               fill="${data.gridColour}" 
-                                              display="${config.entities?.energy_cost_buy && data.stateEnergyCostBuy.isValid() ? '' : 'none'}" >
+                                              display="${config.entities?.energy_cost_buy && data.stateEnergyCostBuy.isValid() && !config.entities.non_essential_load2_extra ? '' : 'none'}" >
+                                            ${data.energyCost} ${data.stateEnergyCostBuy?.getUOM()}
+                                        </text>
+                                        <text id="energy_cost" x="${config.inverter?.three_phase ? '414' : '430'}" y="305" class="${!config.show_grid ? 'st12' : config.inverter?.three_phase ? 'st3 right-align' : 'st3 left-align'}" 
+                                              fill="${data.gridColour}" 
+                                              display="${config.entities?.energy_cost_buy && data.stateEnergyCostBuy.isValid() && config.entities.non_essential_load2_extra ? '' : 'none'}" >
                                             ${data.energyCost}
                                         </text>
-                                        <text id="energy_cost" x="414" y="318" class="${!config.show_grid ? 'st12' : 'st3 right-align'}" 
+                                        <text id="energy_cost" x="${config.inverter?.three_phase ? '414' : '437'}" y="318" class="${!config.show_grid ? 'st12' : config.inverter?.three_phase ? 'st3 right-align' : 'st3 left-align'}" 
                                               fill="${data.gridColour}" 
-                                              display="${config.entities?.energy_cost_buy && data.stateEnergyCostBuy.isValid() ? '' : 'none'}" >
+                                              display="${config.entities?.energy_cost_buy && data.stateEnergyCostBuy.isValid() && config.entities.non_essential_load2_extra ? '' : 'none'}" >
                                             ${data.stateEnergyCostBuy?.getUOM()}
                                         </text>
                                     </a>`
@@ -1977,12 +2044,17 @@ export const fullCard = (config: sunsynkPowerFlowCardConfig, inverterImg: string
                                     <a href="#" @click=${(e) => Utils.handlePopup(e, config.entities.energy_cost_sell)}>
                                         <text id="energy_cost" x="414" y="305"  class="${!config.show_grid ? 'st12' : 'st3 right-align'}" 
                                               fill="${data.gridColour}" 
-                                              display="${config.entities?.energy_cost_sell && data.stateEnergyCostSell.isValid() ? '' : 'none'}" >
-                                            ${data.energyCost}}
+                                              display="${config.entities?.energy_cost_sell && data.stateEnergyCostSell.isValid() && !config.entities.non_essential_load2_extra ? '' : 'none'}" >
+                                            ${data.energyCost} ${data.stateEnergyCostSell?.getUOM()}
                                         </text>
-                                        <text id="energy_cost" x="414" y="318"  class="${!config.show_grid ? 'st12' : 'st3 right-align'}" 
+                                        <text id="energy_cost" x="${config.inverter?.three_phase ? '414' : '430'}" y="305"  class="${!config.show_grid ? 'st12' : config.inverter?.three_phase ? 'st3 right-align' : 'st3 left-align'}" 
                                               fill="${data.gridColour}" 
-                                              display="${config.entities?.energy_cost_sell && data.stateEnergyCostSell.isValid() ? '' : 'none'}" >
+                                              display="${config.entities?.energy_cost_sell && data.stateEnergyCostSell.isValid() && config.entities.non_essential_load2_extra ? '' : 'none'}" >
+                                            ${data.energyCost}
+                                        </text>
+                                        <text id="energy_cost" x="${config.inverter?.three_phase ? '414' : '437'}" y="318"  class="${!config.show_grid ? 'st12' : config.inverter?.three_phase ? 'st3 right-align' : 'st3 left-align'}" 
+                                              fill="${data.gridColour}" 
+                                              display="${config.entities?.energy_cost_sell && data.stateEnergyCostSell.isValid() && config.entities.non_essential_load2_extra ? '' : 'none'}" >
                                             ${data.stateEnergyCostSell?.getUOM()}
                                         </text>
                                     </a>`
@@ -2058,10 +2130,9 @@ export const fullCard = (config: sunsynkPowerFlowCardConfig, inverterImg: string
                     <a href="#" @click=${(e) => Utils.handlePopup(e, config.entities.battery_soc_184)}>
                         <text id="battery_soc_184" x="191.5" y="333" fill=${data.batteryColour}
                               class="st13 st8 left-align"
-                              display="${data.inverterProg.show === false
+                              display="${!data.inverterProg.show
                               || config.entities.battery_soc_184 === 'none'
                               || !config.show_battery
-                              || [InverterModel.GoodweGridMode, InverterModel.Goodwe, InverterModel.Huawei].includes(data.inverterModel)
                               || config.battery.hide_soc ? 'none' : ''}">
                             | ${data.inverterProg.capacity || 0}%
                         </text>
@@ -2069,7 +2140,7 @@ export const fullCard = (config: sunsynkPowerFlowCardConfig, inverterImg: string
                     <a href="#" @click=${(e) => Utils.handlePopup(e, config.entities.battery_soc_184)}>
                         <text id="battery_soc_184" x="191.5" y="333" fill=${data.batteryColour}
                               class="${config.battery.hide_soc || !config.show_battery ? 'st12' : 'st13 st8 left-align'}"
-                              display="${[InverterModel.GoodweGridMode, InverterModel.Goodwe, InverterModel.Huawei].includes(data.inverterModel) && config.battery?.shutdown_soc && !config.battery?.shutdown_soc_offgrid
+                              display="${!data.inverterProg.show && config.battery?.shutdown_soc && !config.battery?.shutdown_soc_offgrid
                                       ? '' : 'none'}">
                             | ${data.batteryShutdown || 0}%
                         </text>
@@ -2077,7 +2148,7 @@ export const fullCard = (config: sunsynkPowerFlowCardConfig, inverterImg: string
                     <a href="#" @click=${(e) => Utils.handlePopup(e, config.entities.battery_soc_184)}>
                         <text id="battery_soc_184" x="191.5" y="333" fill=${data.batteryColour}
                               class="${config.battery.hide_soc || !config.show_battery ? 'st12' : 'st13 st8 left-align'}"
-                              display="${[InverterModel.GoodweGridMode, InverterModel.Goodwe, InverterModel.Huawei].includes(data.inverterModel) && config.battery?.shutdown_soc_offgrid ? '' : 'none'}">
+                              display="${!data.inverterProg.show && config.battery?.shutdown_soc_offgrid ? '' : 'none'}">
                             |
                         </text>
                     </a>
@@ -2194,6 +2265,13 @@ export const fullCard = (config: sunsynkPowerFlowCardConfig, inverterImg: string
                               class="${config.entities?.battery_temp_182 ? 'st3 left-align' : 'st12'}"
                               fill="${data.batteryColour}" display="${!config.show_battery || !data.stateBatteryTemp.isValid() ? 'none' : ''}">
                             ${data.stateBatteryTemp.toNum(1)}°
+                        </text>
+                    </a>
+                    <a href="#" @click=${(e) => Utils.handlePopup(e, config.entities.battery_soh)}>
+                        <text id="battery_soh" x="93.7" y="295"
+                              class="${config.entities?.battery_soh ? 'st3 left-align' : 'st12'}"
+                              fill="${data.batteryColour}" display="${!config.show_battery || !data.stateBatterySOH.isValid() || config.entities?.battery_temp_182 ? 'none' : ''}">
+                            ${data.stateBatterySOH.toNum(0)}%
                         </text>
                     </a>
                     <a href="#" @click=${(e) => Utils.handlePopup(e, config.entities.radiator_temp_91)}>

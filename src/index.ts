@@ -1,13 +1,23 @@
 import {CSSResultGroup, LitElement} from 'lit';
 import {customElement, property, query} from 'lit/decorators.js';
-import {HomeAssistant} from 'custom-card-helpers';
+import {HomeAssistant, LovelaceCardEditor} from 'custom-card-helpers';
 import {styles} from './style';
 import {CardStyle, DataDto, InverterModel, InverterSettings, sunsynkPowerFlowCardConfig,} from './types';
 import defaultConfig from './defaults';
-import {CARD_VERSION, valid3phase, validaux, validLoadValues, validnonLoadValues, validGridConnected, validGridDisconnected, validauxLoads} from './const';
+import {
+    CARD_VERSION,
+    EDITOR_NAME,
+    MAIN_NAME,
+    valid3phase,
+    validaux,
+    validauxLoads,
+    validGridConnected,
+    validGridDisconnected,
+    validLoadValues,
+    validnonLoadValues
+} from './const';
 import {localize} from './localize/localize';
 import merge from 'lodash.merge';
-import {SunSynkCardEditor} from './editor';
 import {Utils} from './helpers/utils';
 import {fullCard} from './cards/full-card';
 import {compactCard} from './cards/compact-card';
@@ -25,7 +35,7 @@ console.groupCollapsed(
 console.log('Readme:', 'https://github.com/slipx06/sunsynk-power-flow-card');
 console.groupEnd();
 
-@customElement('sunsynk-power-flow-card')
+@customElement(MAIN_NAME)
 export class SunsynkPowerFlowCard extends LitElement {
     @property() public hass!: HomeAssistant;
     @property() private _config!: sunsynkPowerFlowCardConfig;
@@ -49,8 +59,9 @@ export class SunsynkPowerFlowCard extends LitElement {
         return styles;
     }
 
-    static getConfigElement() {
-        return document.createElement("content-card-editor");
+    public static async getConfigElement() {
+        await import("./editor");
+        return document.createElement(EDITOR_NAME) as LovelaceCardEditor;
     }
 
     static getStubConfig() {
@@ -147,6 +158,7 @@ export class SunsynkPowerFlowCard extends LitElement {
         const stateBatteryRatedCapacity = this.getEntity('entities.battery_rated_capacity', {state: ''});
         const stateShutdownSOC = this.getEntity('battery.shutdown_soc', {state: config.battery.shutdown_soc?.toString() ?? ''});
         const stateShutdownSOCOffGrid = this.getEntity('battery.shutdown_soc_offgrid', {state: config.battery.shutdown_soc_offgrid?.toString() ?? ''});
+        const stateBatterySOH = this.getEntity('entities.battery_soh', {state: ''});
 
         //Load
         const stateEssentialPower = this.getEntity('entities.essential_power');
@@ -166,6 +178,8 @@ export class SunsynkPowerFlowCard extends LitElement {
         const stateAuxLoad2 = this.getEntity('entities.aux_load2');
         const stateEssentialLoad1Extra = this.getEntity('entities.essential_load1_extra');
         const stateEssentialLoad2Extra = this.getEntity('entities.essential_load2_extra');
+        const stateEssentialLoad3Extra = this.getEntity('entities.essential_load3_extra');
+        const stateEssentialLoad4Extra = this.getEntity('entities.essential_load4_extra');
         const stateLoadPowerL1 = this.getEntity('entities.load_power_L1');
         const stateLoadPowerL2 = this.getEntity('entities.load_power_L2');
         const stateLoadPowerL3 = this.getEntity('entities.load_power_L3');
@@ -217,9 +231,8 @@ export class SunsynkPowerFlowCard extends LitElement {
         let gridPower = stateGridCTPower.toPower(invert_grid);
         let gridPowerL2 = stateGridCTPowerL2.toPower(invert_grid);
         let gridPowerL3 = stateGridCTPowerL3.toPower(invert_grid);
-        let gridPower3Phase = stateGridCTPowerTotal.toPower(invert_grid);
         let gridPowerTotal = config.entities?.grid_ct_power_total
-            ? gridPower3Phase
+            ? stateGridCTPowerTotal.toPower(invert_grid)
             : gridPower + gridPowerL2 + gridPowerL3;
 
         let totalGridPower = config.inverter.three_phase ? gridPowerTotal : gridPower;
@@ -228,11 +241,18 @@ export class SunsynkPowerFlowCard extends LitElement {
         let batteryCurrentDirection = !stateBatteryCurrentDirection.isNaN() ? stateBatteryCurrentDirection.toNum(0) : null;
         let genericInverterImage = config.inverter?.modern;
 
-        let loadColour = this.colourConvert(config.load?.colour);        
-        let auxDynamicColour = this.calculateAuxLoadColour(stateAuxPower, 0) || loadColour;
+        let decimalPlaces = config.decimal_places;
+        let decimalPlacesEnergy = config.decimal_places_energy;
+
+        let loadColour = this.colourConvert(config.load?.colour);
+        let auxDynamicColour = this.calculateAuxLoadColour(stateAuxPower.toPower(false), Utils.toNum(config.load?.off_threshold, 0)) || loadColour;
         let auxOffColour = this.colourConvert(config.load?.aux_off_colour || auxDynamicColour);
-        let auxDynamicColourLoad1 = this.calculateAuxLoadColour(stateAuxLoad1, 0) || loadColour;
-        let auxDynamicColourLoad2 = this.calculateAuxLoadColour(stateAuxLoad2, 0) || loadColour;
+        let auxDynamicColourLoad1 = this.calculateAuxLoadColour(stateAuxLoad1.toPower(false), Utils.toNum(config.load?.off_threshold, 0)) || loadColour;
+        let auxDynamicColourLoad2 = this.calculateAuxLoadColour(stateAuxLoad2.toPower(false), Utils.toNum(config.load?.off_threshold, 0)) || loadColour;
+        let dynamicColourEssentialLoad1 = this.calculateEssentialLoadColour(stateEssentialLoad1.toPower(false), Utils.toNum(config.load?.off_threshold, 0)) || loadColour;
+        let dynamicColourEssentialLoad2 = this.calculateEssentialLoadColour(stateEssentialLoad2.toPower(false), Utils.toNum(config.load?.off_threshold, 0)) || loadColour;
+        let dynamicColourEssentialLoad3 = this.calculateEssentialLoadColour(stateEssentialLoad3.toPower(false), Utils.toNum(config.load?.off_threshold, 0)) || loadColour;
+        let dynamicColourEssentialLoad4 = this.calculateEssentialLoadColour(stateEssentialLoad4.toPower(false), Utils.toNum(config.load?.off_threshold, 0)) || loadColour;
 
         config.title_colour = this.colourConvert(config.title_colour);
 
@@ -297,13 +317,23 @@ export class SunsynkPowerFlowCard extends LitElement {
             case totalGridPower < 0:
                 gridColour = gridExportColour;
                 break;
-            case totalGridPower === 0:
+            case totalGridPower >= 0 && totalGridPower <= Utils.toNum(config.grid?.off_threshold, 0):
                 gridColour = noGridColour;
                 break;
             default:
                 gridColour = gridImportColour;
                 break;
         }
+
+        let dynamicColourNonEssentialLoad1 = Math.abs(stateNonessentialLoad1.toPower(false)) > Utils.toNum(config.grid?.off_threshold, 0)
+            ? gridColour
+            : 'grey';
+        let dynamicColourNonEssentialLoad2 = Math.abs(stateNonessentialLoad2.toPower(false)) > Utils.toNum(config.grid?.off_threshold, 0)
+            ? gridColour
+            : 'grey';
+        let dynamicColourNonEssentialLoad3 = Math.abs(stateNonessentialLoad3.toPower(false)) > Utils.toNum(config.grid?.off_threshold, 0)
+            ? gridColour
+            : 'grey';
 
         const gridOffColour = this.colourConvert(config.grid?.grid_off_colour || gridColour);
 
@@ -343,7 +373,7 @@ export class SunsynkPowerFlowCard extends LitElement {
         }
 
         let auxType = config.load?.aux_type; //valid options are gen,inverter, default, gen, boiler, pump, aircon
-        
+
         //Icons
         const iconEssentialLoad1 = this.getEntity('load.load1_icon', {state: config.load?.load1_icon?.toString() ?? ''}).state;
         const iconEssentialLoad2 = this.getEntity('load.load2_icon', {state: config.load?.load2_icon?.toString() ?? ''}).state;
@@ -355,9 +385,10 @@ export class SunsynkPowerFlowCard extends LitElement {
         const iconNonessentialLoad1 = this.getEntity('grid.load1_icon', {state: config.grid?.load1_icon?.toString() ?? ''}).state;
         const iconNonessentialLoad2 = this.getEntity('grid.load2_icon', {state: config.grid?.load2_icon?.toString() ?? ''}).state;
         const iconNonessentialLoad3 = this.getEntity('grid.load3_icon', {state: config.grid?.load3_icon?.toString() ?? ''}).state;
-        
-        let decimalPlaces = config.decimal_places;
-        let decimalPlacesEnergy = config.decimal_places_energy;
+        const iconGridImport = this.getEntity('grid.import_icon', {state: config.grid?.import_icon?.toString() ?? ''}).state;
+        const iconGridDisconnected = this.getEntity('grid.disconnected_icon', {state: config.grid?.disconnected_icon?.toString() ?? ''}).state;
+        const iconGridExport = this.getEntity('grid.export_icon', {state: config.grid?.export_icon?.toString() ?? ''}).state;
+
         let remainingSolar = config.entities.remaining_solar ? Utils.convertValueNew(stateRemainingSolar.state, stateRemainingSolar.attributes?.unit_of_measurement, decimalPlaces) : false;
         let totalSolarGeneration = config.entities.total_pv_generation ? Utils.convertValueNew(stateTotalPVGeneration.state, stateTotalPVGeneration.attributes?.unit_of_measurement, 2) : false;
         let largeFont = config.large_font;
@@ -408,7 +439,7 @@ export class SunsynkPowerFlowCard extends LitElement {
         let solarColour =
             !config.solar.dynamic_colour
                 ? this.colourConvert(config.solar?.colour)
-                : Utils.toNum(totalPV, 0) > 10
+                : Utils.toNum(totalPV, 0) > Utils.toNum(config.solar?.off_threshold, 0)
                     ? this.colourConvert(config.solar?.colour)
                     : 'grey';
 
@@ -501,20 +532,20 @@ export class SunsynkPowerFlowCard extends LitElement {
                 break;
             default:
                 inverterProg.show = true;
-        
+
                 const timer_now = new Date(); // Create a new Date object representing the current time
-        
+
                 const progTimes: Date[] = [];
-        
+
                 [prog1, prog2, prog3, prog4, prog5, prog6].forEach((prog, index) => {
                     const [hours, minutes] = prog.time.state.split(':').map(item => parseInt(item, 10));
                     progTimes[index] = new Date(timer_now.getTime());
                     progTimes[index].setHours(hours);
                     progTimes[index].setMinutes(minutes);
                 });
-        
+
                 const [prog_time1, prog_time2, prog_time3, prog_time4, prog_time5, prog_time6] = progTimes;
-        
+
                 if (timer_now >= prog_time6 || timer_now < prog_time1) {
                     assignInverterProgValues(prog6, config.entities.prog6_charge);
                 } else if (timer_now >= prog_time1 && timer_now < prog_time2) {
@@ -528,16 +559,17 @@ export class SunsynkPowerFlowCard extends LitElement {
                 } else if (timer_now >= prog_time5 && timer_now < prog_time6) {
                     assignInverterProgValues(prog5, config.entities.prog5_charge);
                 }
-        
-                function assignInverterProgValues(prog, entityID) {
-                     if (prog.charge.state === 'No Grid or Gen' || prog.charge.state === '0' || prog.charge.state === 'off') {
-                         inverterProg.charge = 'none';
-                     } else {
-                         inverterProg.charge = 'both';
-                     }
-                     inverterProg.capacity = parseInt(prog.capacity.state);
-                     inverterProg.entityID = entityID;
-                 }
+
+            function assignInverterProgValues(prog, entityID) {
+                if (prog.charge.state === 'No Grid or Gen' || prog.charge.state === '0' || prog.charge.state === 'off') {
+                    inverterProg.charge = 'none';
+                } else {
+                    inverterProg.charge = 'both';
+                }
+                inverterProg.capacity = parseInt(prog.capacity.state);
+                inverterProg.entityID = entityID;
+            }
+
                 break;
         }
 
@@ -555,10 +587,8 @@ export class SunsynkPowerFlowCard extends LitElement {
         //calculate battery capacity
         let batteryCapacity: number = 0;
         if (config.show_battery) {
-            switch (inverterModel) {
-                case InverterModel.GoodweGridMode:
-                case InverterModel.Goodwe:
-                case InverterModel.Huawei:
+            switch (true) {
+                case !inverterProg.show:
                     if (batteryPower > 0) {
                         if (
                             (gridStatus === 'on' || gridStatus === '1' || gridStatus.toLowerCase() === 'on-grid') &&
@@ -855,7 +885,7 @@ export class SunsynkPowerFlowCard extends LitElement {
         const totalPercentage = pvPercentageRaw + batteryPercentageRaw;
         const normalizedPvPercentage = totalPercentage === 0 ? 0 : (pvPercentageRaw / totalPercentage) * 100;
         const normalizedBatteryPercentage = totalPercentage === 0 ? 0 : (batteryPercentageRaw / totalPercentage) * 100;
-        
+
         //console.log(`${normalizedPvPercentage} % normalizedPVPercentage to load, ${normalizedBatteryPercentage} % normalizedBatteryPercentage to load`); 
 
         let pvPercentage = 0;
@@ -906,10 +936,10 @@ export class SunsynkPowerFlowCard extends LitElement {
 
         let flowBatColour: string;
         switch (true) {
-            case pvPercentageBat === 100:
+            case pvPercentageBat >= Utils.toNum(config.battery?.path_threshold, 0):
                 flowBatColour = solarColour;
                 break;
-            case gridPercentageBat === 100:
+            case gridPercentageBat >= Utils.toNum(config.battery?.path_threshold, 0):
                 flowBatColour = gridColour;
                 break;
             default:
@@ -917,31 +947,62 @@ export class SunsynkPowerFlowCard extends LitElement {
                 break;
         }
 
+        let flowColour: string;
+        switch (true) {
+            case pvPercentage >= Utils.toNum(config.load?.path_threshold, 0):
+                flowColour = solarColour;
+                break;
+            case batteryPercentage >= Utils.toNum(config.load?.path_threshold, 0):
+                flowColour = batteryColour;
+                break;
+            case gridPercentage >= Utils.toNum(config.load?.path_threshold, 0):
+                flowColour = gridColour;
+                break;
+            default:
+                flowColour = loadColour;
+                break;
+        }
+
+        let flowInvColour: string;
+        switch (true) {
+            case pvPercentage >= Utils.toNum(config.load?.path_threshold, 0):
+                flowInvColour = solarColour;
+                break;
+            case batteryPercentage >= Utils.toNum(config.load?.path_threshold, 0):
+                flowInvColour = batteryColour;
+                break;
+            case gridPercentage >= Utils.toNum(config.load?.path_threshold, 0):
+                flowInvColour = gridColour;
+                break;
+            case gridPercentageBat >= Utils.toNum(config.battery?.path_threshold, 0):
+                flowInvColour = gridColour;
+                break;
+            default:
+                flowInvColour = inverterColour;
+                break;
+        }
+
         //console.log(`${pvPercentageBat} % PV to charge battery, ${gridPercentageBat} % Grid to charge battery`);
 
         let essIcon: string;
         let essIconSize: number;
-        let flowColour: string;
+
         switch (true) {
             case pvPercentageRaw >= 100 && batteryPercentageRaw <= 5 && (totalGridPower - nonessentialPower) < 50 && config.load.dynamic_icon:
                 essIcon = icons.essPv;
                 essIconSize = 1;
-                flowColour = solarColour;
                 break;
             case batteryPercentageRaw >= 100 && pvPercentageRaw <= 5 && (totalGridPower - nonessentialPower) < 50 && config.load.dynamic_icon:
                 essIcon = icons.essBat;
                 essIconSize = 0;
-                flowColour =batteryColour;
                 break;
             case pvPercentageRaw < 5 && batteryPercentageRaw < 5 && gridPercentage > 0 && config.load.dynamic_icon:
                 essIcon = icons.essGrid;
                 essIconSize = 0;
-                flowColour = gridColour;
                 break;
             default:
                 essIcon = icons.ess;
                 essIconSize = 0;
-                flowColour = loadColour;
                 break;
         }
 
@@ -953,11 +1014,33 @@ export class SunsynkPowerFlowCard extends LitElement {
         const pv3MaxPower = this.getEntity('solar.pv3_max_power', {state: config.solar.pv3_max_power?.toString() ?? ''});
         const pv4MaxPower = this.getEntity('solar.pv4_max_power', {state: config.solar.pv4_max_power?.toString() ?? ''});
 
-        const totalPVEfficiency = (!config.solar.max_power || config.solar.efficiency === 0) ? 100 : Utils.toNum(Math.min((totalPV / solarMaxPower.toNum()) * 100, 200) ,0); 
-        const PV1Efficiency = (!config.solar.pv1_max_power || config.solar.efficiency === 0) ? 100 : Utils.toNum(Math.min((pv1PowerWatts / pv1MaxPower.toNum()) * 100, 200) ,0);
-        const PV2Efficiency = (!config.solar.pv2_max_power || config.solar.efficiency === 0) ? 100 : Utils.toNum(Math.min((pv2PowerWatts / pv2MaxPower.toNum()) * 100, 200) ,0);
-        const PV3Efficiency = (!config.solar.pv3_max_power || config.solar.efficiency === 0) ? 100 : Utils.toNum(Math.min((pv3PowerWatts / pv3MaxPower.toNum()) * 100, 200) ,0);
-        const PV4Efficiency = (!config.solar.pv4_max_power || config.solar.efficiency === 0) ? 100 : Utils.toNum(Math.min((pv4PowerWatts / pv4MaxPower.toNum()) * 100, 200) ,0);
+        const totalPVEfficiency = (!config.solar.max_power || config.solar.efficiency === 0) ? 100 : Utils.toNum(Math.min((totalPV / solarMaxPower.toNum()) * 100, 200), 0);
+        const PV1Efficiency = (!config.solar.pv1_max_power || config.solar.efficiency === 0) ? 100 : Utils.toNum(Math.min((pv1PowerWatts / pv1MaxPower.toNum()) * 100, 200), 0);
+        const PV2Efficiency = (!config.solar.pv2_max_power || config.solar.efficiency === 0) ? 100 : Utils.toNum(Math.min((pv2PowerWatts / pv2MaxPower.toNum()) * 100, 200), 0);
+        const PV3Efficiency = (!config.solar.pv3_max_power || config.solar.efficiency === 0) ? 100 : Utils.toNum(Math.min((pv3PowerWatts / pv3MaxPower.toNum()) * 100, 200), 0);
+        const PV4Efficiency = (!config.solar.pv4_max_power || config.solar.efficiency === 0) ? 100 : Utils.toNum(Math.min((pv4PowerWatts / pv4MaxPower.toNum()) * 100, 200), 0);
+        
+        let customGridIcon: string;
+        let customGridIconColour: string;
+        switch (true) {
+            case totalGridPower < 0 && validGridConnected.includes(gridStatus.toLowerCase()):
+                customGridIcon = iconGridExport;
+                customGridIconColour = gridColour;
+                break;
+            case totalGridPower >= 0 && validGridConnected.includes(gridStatus.toLowerCase()):
+                customGridIcon = iconGridImport;
+                customGridIconColour = gridColour;
+                break;
+            case totalGridPower === 0 && validGridDisconnected.includes(gridStatus.toLowerCase()):
+                customGridIcon = iconGridDisconnected;
+                customGridIconColour = gridOffColour;
+                break;
+            default:
+                customGridIcon = iconGridImport;
+                customGridIconColour = gridColour;
+                break;
+        }
+           
         /**
          * The current structure of this data object is intentional, but it is considered temporary.
          * There is a need to evaluate the data being passed, as there might be duplication.
@@ -1009,6 +1092,8 @@ export class SunsynkPowerFlowCard extends LitElement {
             decimalPlacesEnergy,
             stateEssentialLoad1Extra,
             stateEssentialLoad2Extra,
+            stateEssentialLoad3Extra,
+            stateEssentialLoad4Extra,
             stateNonEssentialLoad1Extra,
             stateNonEssentialLoad2Extra,
             loadFrequency,
@@ -1134,7 +1219,18 @@ export class SunsynkPowerFlowCard extends LitElement {
             PV4Efficiency,
             gridPercentage,
             flowColour,
-            flowBatColour
+            flowBatColour,
+            flowInvColour,
+            dynamicColourEssentialLoad1,
+            dynamicColourEssentialLoad2,
+            dynamicColourEssentialLoad3,
+            dynamicColourEssentialLoad4,
+            dynamicColourNonEssentialLoad1,
+            dynamicColourNonEssentialLoad2,
+            dynamicColourNonEssentialLoad3,
+            stateBatterySOH,
+            customGridIcon,
+            customGridIconColour
         };
 
         if (this.isFullCard) {
@@ -1216,8 +1312,16 @@ export class SunsynkPowerFlowCard extends LitElement {
     calculateAuxLoadColour(state, threshold) {
         return !this._config.load.aux_dynamic_colour
             ? this.colourConvert(this._config.load?.aux_colour)
-            : Math.abs(state.toNum(0)) > threshold
+            : Math.abs(state) > threshold
                 ? this.colourConvert(this._config.load?.aux_colour)
+                : 'grey';
+    }
+
+    calculateEssentialLoadColour(state, threshold) {
+        return !this._config.load.dynamic_colour
+            ? this.colourConvert(this._config.load?.colour)
+            : Math.abs(state) > threshold
+                ? this.colourConvert(this._config.load?.colour)
                 : 'grey';
     }
 
@@ -1301,11 +1405,6 @@ export class SunsynkPowerFlowCard extends LitElement {
     }
 }
 
-try {
-    customElements.define("content-card-editor", SunSynkCardEditor);
-} catch (_e) {
-}
-(window as any).customCards = (window as any).customCards || [];
 (window as any).customCards.push({
     type: 'sunsynk-power-flow-card',
     name: 'Sunsynk Power Flow Card',

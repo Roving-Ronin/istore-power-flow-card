@@ -85,6 +85,7 @@ export interface sunsynkPowerFlowCardConfig extends LovelaceCardConfig {
         dynamic_colour: boolean;
         linear_gradient: boolean;
         animate: boolean;
+        path_threshold: number,
     }
     solar: {
         colour: string;
@@ -104,6 +105,7 @@ export interface sunsynkPowerFlowCardConfig extends LovelaceCardConfig {
         display_mode: number;
         dynamic_colour: boolean;
         efficiency: number;
+        off_threshold: number;
     }
     load: {
         colour: string;
@@ -121,6 +123,7 @@ export interface sunsynkPowerFlowCardConfig extends LovelaceCardConfig {
         aux_type: string;
         aux_colour: string;
         aux_off_colour: string;
+        off_threshold: number;
         additional_loads: number;
         aux_loads: number;
         aux_load1_name: string;
@@ -139,10 +142,13 @@ export interface sunsynkPowerFlowCardConfig extends LovelaceCardConfig {
         show_daily_aux: boolean;
         auto_scale: boolean;
         essential_name: string,
+        path_threshold: number,
     }
     grid: {
         colour: string;
         grid_name: string;
+        label_daily_grid_buy: string;
+        label_daily_grid_sell: string;
         export_colour: string;
         no_grid_colour: string;
         grid_off_colour: string;
@@ -164,6 +170,10 @@ export interface sunsynkPowerFlowCardConfig extends LovelaceCardConfig {
         auto_scale: boolean;
         energy_cost_decimals: number;
         show_absolute: boolean;
+        off_threshold: number;
+        import_icon: string;
+        export_icon: string;
+        disconnected_icon: string;
     }
     entities: CardConfigEntities
 }
@@ -184,6 +194,7 @@ export interface CardConfigEntities {
     battery_power_190: string,
     battery_current_191: string,
     battery_rated_capacity: string;
+    battery_soh: string;
     grid_power_169: string,
     grid_voltage: string,
     day_grid_import_76: string,
@@ -233,6 +244,8 @@ export interface CardConfigEntities {
     energy_cost_sell: string,
     essential_load1_extra: string,
     essential_load2_extra: string,
+    essential_load3_extra: string,
+    essential_load4_extra: string,
     inverter_voltage_L2: string,
     inverter_voltage_L3: string,
     inverter_current_L2: string,
@@ -408,6 +421,8 @@ export interface DataDto {
     stateEssentialLoad4: CustomEntity,
     stateEssentialLoad1Extra: CustomEntity,
     stateEssentialLoad2Extra: CustomEntity,
+    stateEssentialLoad3Extra: CustomEntity,
+    stateEssentialLoad4Extra: CustomEntity,
     stateNonEssentialLoad1Extra: CustomEntity,
     stateNonEssentialLoad2Extra: CustomEntity,
     statePV4Current: CustomEntity,
@@ -445,5 +460,16 @@ export interface DataDto {
     PV4Efficiency,
     gridPercentage,
     flowColour,
-    flowBatColour
+    flowBatColour,
+    flowInvColour,
+    dynamicColourEssentialLoad1,
+    dynamicColourEssentialLoad2,
+    dynamicColourEssentialLoad3,
+    dynamicColourEssentialLoad4,
+    dynamicColourNonEssentialLoad1,
+    dynamicColourNonEssentialLoad2,
+    dynamicColourNonEssentialLoad3,
+    stateBatterySOH: CustomEntity,
+    customGridIcon,
+    customGridIconColour
 }
