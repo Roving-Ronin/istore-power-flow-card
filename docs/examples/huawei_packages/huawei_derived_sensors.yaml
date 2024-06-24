@@ -644,12 +644,12 @@ template:
       unit_of_measurement: "°C"
       device_class: "temperature"      
       state: >-
-        {% set battery_temp_1 = states('sensor.battery_battery_1_temperature') | float(default=0) %}
-        {% set battery_temp_2 = states('sensor.battery_battery_2_temperature') | float(default=0) %}
+        {% set battery_temp_1 = states('sensor.battery_1_temperature') | float(default=0) %}
+        {% set battery_temp_2 = states('sensor.battery_2_temperature') | float(default=0) %}
         {{ max(battery_temp_1, battery_temp_2) | round(1) }}
       availability: >-
-        {{ states('sensor.battery_battery_1_temperature') != 'unavailable'
-        or states('sensor.battery_battery_1_temperature_2') != 'unavailable' }}
+        {{ states('sensor.battery_1_temperature') != 'unavailable'
+        or states('sensor.battery_1_temperature_2') != 'unavailable' }}
 
      
   # Provides the combined status both batteries. If either battery is offline of faulty
